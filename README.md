@@ -74,7 +74,7 @@ import { withHooks /*, useState and other hooks */ } from "mithril-hooks"
 | **Argument**    | **Type**  | **Required** | **Description** |
 | --- | --- | --- | --- | 
 | `renderFunction` | Function | Yes | Function ("functional component") that will handle hooks |
-| `initialProps`  | Object | No | Any variable to pass to `baseComponent` | 
+| `initialProps`  | Object | No | Any variable to pass to `renderFunction` | 
 
 The returned `HookedComponent` can be called as any Mithril component:
 
