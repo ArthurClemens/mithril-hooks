@@ -1,0 +1,67 @@
+:root {
+  --counter-size: 60px;
+  --counter-block-height: 120px;
+  --counter-block-padding: 30px;
+}
+.controls {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin: 0 0 15px 0;
+}
+.controls button + button,
+.controls .info {
+  margin-left: 15px;
+}
+.controls .spacer {
+  display: flex;
+  width: 100%;
+}
+.counter {
+  opacity: 0;
+  height: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all .3s ease-in-out;
+}
+.counter.active {
+  opacity: 1;
+  height: var(--counter-block-height);
+  max-height: var(--counter-block-height);
+}
+.counter-inner {
+  display: flex;
+  align-items: center;
+  background: #eee;
+  border-radius: 3px;
+  padding: var(--counter-block-padding);
+  border-top: 1px solid #fff;
+  height: var(--counter-block-height);
+  width: 100%;
+}
+.counter-inner .spacer {
+  display: flex;
+  width: 100%;
+}
+.counter-inner button + button,
+.counter-inner button + a {
+ margin-left: 10px;
+}
+.counter .count {
+  user-select: none;
+  flex-shrink: 0;
+  width: var(--counter-size);
+  height: var(--counter-size);
+  margin: 0 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #333;
+  border-radius: 50%;
+  color: #ddd;
+  font-size: 24px;
+  text-align: center;
+}
+
+
+

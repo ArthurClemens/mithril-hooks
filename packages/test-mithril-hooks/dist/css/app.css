@@ -1,0 +1,18 @@
+.layout {
+  display: flex;
+  width: 100%;
+}
+.menu {
+  width: 25%;
+  min-width: 200px;
+  max-width: 250px;
+  border-right: 1px solid #eee;
+  padding: 15px;
+  min-height: 100vh;
+}
+.component {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 30px;
+}
