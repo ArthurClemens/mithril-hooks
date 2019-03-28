@@ -2,4 +2,4 @@
 
 Use hooks in Mithril.
 
-[Documentation](../..//README.md)
+[Documentation](https://github.com/ArthurClemens/mithril-hooks)
