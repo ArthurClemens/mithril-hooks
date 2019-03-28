@@ -21,6 +21,7 @@ Use hooks in Mithril.
     - [useCallback](#usecallback)
     - [Omitted hooks](#omitted-hooks)
   - [Custom hooks](#custom-hooks)
+  - [Children](#children)
 - [Compatibility](#compatibility)
 - [Size](#size)
 - [Supported browsers](#supported-browsers)
@@ -397,8 +398,8 @@ Then use the custom hook:
 
 ```javascript
 // app.js
-import { useCount } from "./useCount"
 import { withHooks } from "mithril-hooks"
+import { useCount } from "./useCount"
 
 const Counter = ({ initialCount }) => {
   const [count, increment, decrement] = useCount(initialCount)
@@ -427,6 +428,30 @@ const HookedCounter = withHooks(Counter)
 m(HookedCounter, { initialCount: 0 })
 ```
 
+### Children
+
+Child elements are accessed through the variable `vnode.children`:
+
+```javascript
+import { withHooks, useState } from "mithril-hooks"
+
+const Counter = ({ initialCount, vnode }) => {
+  const [count, setCount] = useState(initialCount)
+  return [
+    m("div", count),
+    vnode.children
+  ]
+}
+
+const HookedCounter = withHooks(Counter)
+
+m(HookedCounter,
+  { initialCount: 1 },
+  [
+    m("div", "This is a child element")
+  ]
+)
+```
 
 ## Compatibility
 
@@ -435,7 +460,7 @@ Tested with Mithril 1.1.6 and Mithril 2.x.
 
 ## Size
 
-1.3 Kb gzipped
+1.5 Kb gzipped
 
 
 ## Supported browsers
@@ -468,8 +493,8 @@ samsung 8.2
 
 ## History
 
-* Initial version: Barney Carroll (https://twitter.com/barneycarroll/status/1059865107679928320)
-* Updated and enhanced by Arthur Clemens with support from Isiah Meadows
+* Initial version: [Barney Carroll](https://twitter.com/barneycarroll/status/1059865107679928320)
+* Updated and enhanced by Arthur Clemens with support from [Isiah Meadows](https://github.com/isiahmeadows)
 
 
 ## License

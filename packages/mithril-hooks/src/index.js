@@ -79,10 +79,10 @@ export const useLayoutEffect = effect();
 export const useReducer = (reducer, initialArg, initFn) => {
   const state = currentState;
   // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialArg).
-  const initialState = !state.setup && initFn
+  const initialValue = !state.setup && initFn
     ? initFn(initialArg)
     : initialArg;
-  const [value, setValue] = updateState(initialState);
+  const [value, setValue] = updateState(initialValue);
   const dispatch = action =>
     setValue( // Next state:
       reducer(value, action)
@@ -113,25 +113,26 @@ export const useCallback = (fn, deps) =>
     
 export const withHooks = component => {
 
-  const state = {
-    hooks: [],
-    setup: false,
-    states: [],
-    statesIndex: 0,
-    depsStates: [],
-    depsIndex: 0,
-    updates: [],
-    teardowns: new Map // Keep track of teardowns even when the update was run only once
+  const init = vnode => {
+    Object.assign(vnode.state, {
+      setup: false,
+      states: [],
+      statesIndex: 0,
+      depsStates: [],
+      depsIndex: 0,
+      updates: [],
+      teardowns: new Map // Keep track of teardowns even when the update was run only once
+    });
   };
   
-  const update = () => {
+  const update = vnode => {
     const prevState = currentState;
-    currentState = state;
+    currentState = vnode.state;
     try {
-      state.updates.forEach(call);
+      vnode.state.updates.forEach(call);
     }
     finally {
-      Object.assign(state, {
+      Object.assign(vnode.state, {
         setup: true,
         updates: [],
         depsIndex: 0,
@@ -143,9 +144,12 @@ export const withHooks = component => {
   
   const render = vnode => {
     const prevState = currentState;
-    currentState = state;
+    currentState = vnode.state;
     try {
-      return component(vnode.attrs);
+      return component({
+        ...vnode.attrs,
+        vnode
+      });
     }
     catch (e) {
       console.error(e); // eslint-disable-line no-console
@@ -155,11 +159,11 @@ export const withHooks = component => {
     }
   };
   
-  const teardown = () => {
+  const teardown = vnode => {
     const prevState = currentState;
-    currentState = state;
+    currentState = vnode.state;
     try {
-      [...state.teardowns.values()].forEach(call);
+      [...vnode.state.teardowns.values()].forEach(call);
     }
     finally {
       currentState = prevState;
@@ -167,6 +171,8 @@ export const withHooks = component => {
   };
       
   return {
+    oninit: init,
+    oncreate: update,
     onupdate: update,
     view: render,
     onremove: teardown,

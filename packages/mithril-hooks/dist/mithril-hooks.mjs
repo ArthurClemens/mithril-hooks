@@ -1,5 +1,39 @@
 import m from 'mithril';
 
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
@@ -110,9 +144,9 @@ const useLayoutEffect = effect();
 const useReducer = (reducer, initialArg, initFn) => {
   const state = currentState; // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialArg).
 
-  const initialState = !state.setup && initFn ? initFn(initialArg) : initialArg;
+  const initialValue = !state.setup && initFn ? initFn(initialArg) : initialArg;
 
-  const _updateState = updateState(initialState),
+  const _updateState = updateState(initialValue),
         _updateState2 = _slicedToArray(_updateState, 2),
         value = _updateState2[0],
         setValue = _updateState2[1];
@@ -149,26 +183,27 @@ const useMemo = (fn, deps) => {
 };
 const useCallback = (fn, deps) => useMemo(() => fn, deps);
 const withHooks = component => {
-  const state = {
-    hooks: [],
-    setup: false,
-    states: [],
-    statesIndex: 0,
-    depsStates: [],
-    depsIndex: 0,
-    updates: [],
-    teardowns: new Map() // Keep track of teardowns even when the update was run only once
+  const init = vnode => {
+    Object.assign(vnode.state, {
+      setup: false,
+      states: [],
+      statesIndex: 0,
+      depsStates: [],
+      depsIndex: 0,
+      updates: [],
+      teardowns: new Map() // Keep track of teardowns even when the update was run only once
 
+    });
   };
 
-  const update = () => {
+  const update = vnode => {
     const prevState = currentState;
-    currentState = state;
+    currentState = vnode.state;
 
     try {
-      state.updates.forEach(call);
+      vnode.state.updates.forEach(call);
     } finally {
-      Object.assign(state, {
+      Object.assign(vnode.state, {
         setup: true,
         updates: [],
         depsIndex: 0,
@@ -180,10 +215,12 @@ const withHooks = component => {
 
   const render = vnode => {
     const prevState = currentState;
-    currentState = state;
+    currentState = vnode.state;
 
     try {
-      return component(vnode.attrs);
+      return component(_objectSpread({}, vnode.attrs, {
+        vnode
+      }));
     } catch (e) {
       console.error(e); // eslint-disable-line no-console
     } finally {
@@ -191,18 +228,20 @@ const withHooks = component => {
     }
   };
 
-  const teardown = () => {
+  const teardown = vnode => {
     const prevState = currentState;
-    currentState = state;
+    currentState = vnode.state;
 
     try {
-      [...state.teardowns.values()].forEach(call);
+      [...vnode.state.teardowns.values()].forEach(call);
     } finally {
       currentState = prevState;
     }
   };
 
   return {
+    oninit: init,
+    oncreate: update,
     onupdate: update,
     view: render,
     onremove: teardown
