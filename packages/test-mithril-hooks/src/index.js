@@ -7,12 +7,13 @@ import TestUseState from "./cypress-tests/TestUseState";
 import TestUseRef from "./cypress-tests/TestUseRef";
 import TestUseCallback from "./cypress-tests/TestUseCallback";
 import TestUseEffect from "./cypress-tests/TestUseEffect";
-import TestHookupUseLayoutEffect from "./cypress-tests/TestUseLayoutEffect";
+import TestUseLayoutEffect from "./cypress-tests/TestUseLayoutEffect";
 import TestUseMemo from "./cypress-tests/TestUseMemo";
 import TestUseReducer from "./cypress-tests/TestUseReducer";
-import TestHookupUpdateRules from "./cypress-tests/TestUpdateRules";
+import TestUpdateRules from "./cypress-tests/TestUpdateRules";
 import TestEffectTiming from "./cypress-tests/TestEffectTiming";
 import TestEffectRenderCounts from "./cypress-tests/TestEffectRenderCounts";
+import TestInitialAttributes from "./cypress-tests/TestInitialAttributes";
 
 const links = [
   ["Simple toggle", "/toggle", Toggle],
@@ -25,12 +26,13 @@ const tests = [
   ["Test useRef", "/TestUseRef", TestUseRef],
   ["Test useCallback", "/TestUseCallback", TestUseCallback],
   ["Test useEffect", "/TestUseEffect", TestUseEffect],
-  ["Test useLayoutEffect", "/TestHookupUseLayoutEffect", TestHookupUseLayoutEffect],
+  ["Test useLayoutEffect", "/TestUseLayoutEffect", TestUseLayoutEffect],
   ["Test useMemo", "/TestUseMemo", TestUseMemo],
   ["Test useReducer", "/TestUseReducer", TestUseReducer],
-  ["Test update rules", "/TestHookupUpdateRules", TestHookupUpdateRules],
+  ["Test update rules", "/TestUpdateRules", TestUpdateRules],
   ["Test effect timing", "/TestEffectTiming", TestEffectTiming],
   ["Test effect render counts", "/TestEffectRenderCounts", TestEffectRenderCounts],
+  ["Test attributes", "/TestInitialAttributes", TestInitialAttributes],
 ];
 
 const link = (href, currentRoute, label) => 

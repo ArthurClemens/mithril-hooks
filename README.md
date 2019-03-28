@@ -6,6 +6,8 @@ Use hooks in Mithril.
 - [Introduction](#introduction)
 - [Online demos](#online-demos)
 - [Usage](#usage)
+  - [Signature](#signature)
+  - [Example](#example)
   - [Hooks and application logic](#hooks-and-application-logic)
   - [Rendering rules](#rendering-rules)
     - [With useState](#with-usestate)
@@ -43,31 +45,6 @@ Use hook functions from the [React Hooks API](https://reactjs.org/docs/hooks-int
 * and custom hooks
 
 
-```javascript
-// counter.js
-import { withHooks, useState } from "mithril-hooks"
-
-const Counter = ({ initialCount }) => {
-  const [count, setCount] = useState(initialCount)
-  return [
-    m("div", count),
-    m("button", {
-      onclick: () => setCount(count + 1)
-    }, "More")
-  ]
-}
-
-export default withHooks(Counter)
-```
-
-Use the counter:
-```javascript
-// app.js
-import Counter from "./Counter"
-
-m(Counter, { initialCount: 0 })
-```
-
 ## Online demos
 
 Editable demos using the [Flems playground](https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvAHgBMIA3AAgjYF4AOiABOtWsWEA+FgHoOnKSAC+FdNlyICAKwRU6DJsTwQsAB1oji3LNzBjbwksTNxEs2QFc0ZgNYBzfDosWSwIYkIRaAABACZ8AAZEgFoRanwAFgB+LFo2T1hhQTRTCytuYG4Ad3DCAAlxXzgKbk84GABlYgxGbmU7B25hMIioqGTCRrgitGKDOGsAYVpzeiNufm4ACgBKDakK4u5uD1b2s87uxiPuERhiTxE0bmQb46wt4QVhFuEAUQ41mItAu3AA5G1Lj0YGDhDsbgBdYrKOb0BbcBq0XwwNjLVZodabGoRTFNLZ4iwEhjw2ZoebWACCZjMG0Oz24nAgMCqiG2e34UjeNi2pJxFLW1ORxWKWHwuW8xE+7LYtGonhwDHwAEdPDARABPDowWDUYEiT4gADEYgkcIoNyZZmKOwA3MVKCB2ibiBA0XgAJyIDIZFRqECYHB4IJwPQ0eiMZhaFQIqhQCBoJpIVDhjR4EaRaATKbRKDQhYex7kLTOVzuLw+AJBFahWpjItYuDRJIZfAARnkEAWLdGhcmHY9xH1Zk0nuoUTMxmUCOUQA):
@@ -88,12 +65,56 @@ Use in code:
 
 ```javascript
 import { withHooks /*, useState and other hooks */ } from "mithril-hooks"
+```
 
-const Component = (attrs) => {
-  // ...
+### Signature
+
+`withHooks(renderFunction, initialProps) => HookedComponent`
+
+| **Argument**    | **Type**  | **Required** | **Description** |
+| --- | --- | --- | --- | 
+| `renderFunction` | Function | Yes | Function ("functional component") that will handle hooks |
+| `initialProps`  | Object | No | Any variable to pass to `baseComponent` | 
+
+The returned `HookedComponent` can be called as any Mithril component:
+
+```javascript
+m(HookedComponent, {
+  // component props
+})
+```
+
+`renderFunction` will receive a combined object of `initialProps` and component props.
+
+
+### Example
+
+```javascript
+// counter.js
+
+import { withHooks, useState } from "mithril-hooks"
+
+const Counter = ({ title, defaultTitle, initialCount }) => {
+  const [count, setCount] = useState(initialCount)
+  return [
+    m("h2", title || defaultTitle),
+    m("div", count),
+    m("button", {
+      onclick: () => setCount(count + 1)
+    }, "More")
+  ]
 }
-const HookedComponent = withHooks(Component)
-m(HookedComponent, {})
+
+export default withHooks(Counter, { defaultTitle: "Counter" })
+```
+
+Use the counter:
+```javascript
+// app.js
+
+import Counter from "./Counter"
+
+m(Counter, { initialCount: 0, title: "Hello" })
 ```
 
 

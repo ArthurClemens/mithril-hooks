@@ -6,7 +6,9 @@ const call = Function.prototype.call.bind(
   Function.prototype.call
 );
 
-const scheduleRender = () => m.redraw();
+const scheduleRender = () =>
+  // Call m within the function body so environments with a global instance of m (like flems.io) don't complain
+  m.redraw();
 
 const updateDeps = deps => {
   const state = currentState;
@@ -111,7 +113,7 @@ export const useMemo = (fn, deps) => {
 export const useCallback = (fn, deps) =>
   useMemo(() => fn, deps);
     
-export const withHooks = component => {
+export const withHooks = (component, initialProps) => {
 
   const init = vnode => {
     Object.assign(vnode.state, {
@@ -147,6 +149,7 @@ export const withHooks = component => {
     currentState = vnode.state;
     try {
       return component({
+        ...initialProps,
         ...vnode.attrs,
         vnode
       });
