@@ -15,7 +15,7 @@ export const useCounter = () => {
   ];
 };
 
-export const useArray = (initialValue = []) => {
+const useArray = (initialValue = []) => {
   const [arr, setArr] = useState(initialValue);
   return [
     arr,
