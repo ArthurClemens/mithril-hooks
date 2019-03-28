@@ -6,7 +6,7 @@ const call = Function.prototype.call.bind(
   Function.prototype.call
 );
 
-const scheduleRender = m.redraw;
+const scheduleRender = () => m.redraw();
 
 const updateDeps = deps => {
   const state = currentState;
