@@ -457,16 +457,16 @@ m(HookedCounter, { initialCount: 0 })
 
 ### Children
 
-Child elements are accessed through the variable `vnode.children`:
+Child elements are accessed through the variable `children`:
 
 ```javascript
 import { withHooks, useState } from "mithril-hooks"
 
-const Counter = ({ initialCount, vnode }) => {
+const Counter = ({ initialCount, children }) => {
   const [count, setCount] = useState(initialCount)
   return [
     m("div", count),
-    vnode.children
+    children
   ]
 }
 

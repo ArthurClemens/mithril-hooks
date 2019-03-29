@@ -151,7 +151,8 @@ export const withHooks = (component, initialProps) => {
       return component({
         ...initialProps,
         ...vnode.attrs,
-        vnode
+        vnode,
+        children: vnode.children,
       });
     }
     catch (e) {

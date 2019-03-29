@@ -221,7 +221,8 @@ const withHooks = (component, initialProps) => {
 
     try {
       return component(_objectSpread({}, initialProps, vnode.attrs, {
-        vnode
+        vnode,
+        children: vnode.children
       }));
     } catch (e) {
       console.error(e); // eslint-disable-line no-console
