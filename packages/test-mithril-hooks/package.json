@@ -1,6 +1,6 @@
 {
   "name": "test-mithril-hooks",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "scripts": {
     "lint": "eslint ./src",
@@ -23,7 +23,7 @@
     "cypress": "^3.2.0",
     "http-server": "^0.11.1",
     "mithril": "2.0.0-rc.4",
-    "mithril-hooks": "^0.5.0",
+    "mithril-hooks": "^0.5.1",
     "mithril-node-render": "2.3.1",
     "mithril-query": "^2.5.2",
     "mocha": "^6.0.2",
