@@ -1,6 +1,6 @@
 /* global cy, describe, before, it */
 
-describe("initial attributes", () => {
+describe("Initial attributes", () => {
   
   before(() => {
     cy.visit("/TestInitialAttributes");

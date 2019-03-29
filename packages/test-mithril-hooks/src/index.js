@@ -14,6 +14,8 @@ import TestUpdateRules from "./cypress-tests/TestUpdateRules";
 import TestEffectTiming from "./cypress-tests/TestEffectTiming";
 import TestEffectRenderCounts from "./cypress-tests/TestEffectRenderCounts";
 import TestInitialAttributes from "./cypress-tests/TestInitialAttributes";
+import TestChildren from "./cypress-tests/TestChildren";
+import TestVnode from "./cypress-tests/TestVnode";
 
 const links = [
   ["Simple toggle", "/toggle", Toggle],
@@ -33,6 +35,8 @@ const tests = [
   ["Test effect timing", "/TestEffectTiming", TestEffectTiming],
   ["Test effect render counts", "/TestEffectRenderCounts", TestEffectRenderCounts],
   ["Test attributes", "/TestInitialAttributes", TestInitialAttributes],
+  ["Test children", "/TestChildren", TestChildren],
+  ["Test vnode", "/TestVnode", TestVnode],
 ];
 
 const link = (href, currentRoute, label) => 
