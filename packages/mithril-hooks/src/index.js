@@ -59,10 +59,11 @@ const updateState = (initialValue, newValueFn = value => value) => {
       const previousValue = state.states[index];
       const newValue = newValueFn(value, index);
       state.states[index] = newValue;
-      if (newValue !== previousValue) {
+      if (JSON.stringify(newValue) !== JSON.stringify(previousValue)) {
         scheduleRender(); // Calling redraw multiple times: Mithril will drop extraneous redraw calls, so performance should not be an issue
       }
-    }
+    },
+    index
   ];
 };
 
@@ -84,12 +85,19 @@ export const useReducer = (reducer, initialArg, initFn) => {
   const initialValue = !state.setup && initFn
     ? initFn(initialArg)
     : initialArg;
-  const [value, setValue] = updateState(initialValue);
-  const dispatch = action =>
-    setValue( // Next state:
-      reducer(value, action)
-    );
-  return [value, dispatch];
+
+  const getValueDispatch = () => {
+    const [value, setValue, index] = updateState(initialValue);
+    const dispatch = action => {
+      const previousValue = state.states[index];
+      return setValue( // Next state:
+        reducer(previousValue, action)
+      );
+    };
+    return [value, dispatch];
+  };
+  
+  return getValueDispatch();
 };
   
 export const useRef = initialValue => {

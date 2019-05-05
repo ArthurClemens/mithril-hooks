@@ -21,9 +21,9 @@ const createConfig = isProduction => ({
   resolve: {
     // Make sure that Mithril is included only once
     alias: {
-      "mithril/stream": path.resolve(baseDir, "node_modules/mithril/stream/stream.js"),
+      "mithril/stream": path.resolve(baseDir, "node_modules/mithril/stream/stream.mjs"),
       // Keep in this order!
-      "mithril": path.resolve(baseDir, "node_modules/mithril/mithril.js"),
+      "mithril": path.resolve(baseDir, "node_modules/mithril/mithril.mjs"),
     },
     extensions: [".mjs", ".js", ".jsx", ".ts", ".tsx"],
   },

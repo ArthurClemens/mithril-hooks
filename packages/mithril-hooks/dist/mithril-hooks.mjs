@@ -128,10 +128,10 @@ const updateState = function updateState(initialValue) {
     const newValue = newValueFn(value, index);
     state.states[index] = newValue;
 
-    if (newValue !== previousValue) {
+    if (JSON.stringify(newValue) !== JSON.stringify(previousValue)) {
       scheduleRender(); // Calling redraw multiple times: Mithril will drop extraneous redraw calls, so performance should not be an issue
     }
-  }];
+  }, index];
 };
 
 const useState = initialValue => {
@@ -148,15 +148,23 @@ const useReducer = (reducer, initialArg, initFn) => {
 
   const initialValue = !state.setup && initFn ? initFn(initialArg) : initialArg;
 
-  const _updateState = updateState(initialValue),
-        _updateState2 = _slicedToArray(_updateState, 2),
-        value = _updateState2[0],
-        setValue = _updateState2[1];
+  const getValueDispatch = () => {
+    const _updateState = updateState(initialValue),
+          _updateState2 = _slicedToArray(_updateState, 3),
+          value = _updateState2[0],
+          setValue = _updateState2[1],
+          index = _updateState2[2];
 
-  const dispatch = action => setValue( // Next state:
-  reducer(value, action));
+    const dispatch = action => {
+      const previousValue = state.states[index];
+      return setValue( // Next state:
+      reducer(previousValue, action));
+    };
 
-  return [value, dispatch];
+    return [value, dispatch];
+  };
+
+  return getValueDispatch();
 };
 const useRef = initialValue => {
   // A ref is a persisted object that will not be updated, so it has no setter
