@@ -1,6 +1,6 @@
 {
   "name": "mithril-hooks",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Hooks for Mithril",
   "main": "dist/mithril-hooks",
   "module": "dist/mithril-hooks.mjs",
@@ -19,10 +19,9 @@
   "homepage": "https://github.com/ArthurClemens/mithril-hooks",
   "license": "MIT",
   "devDependencies": {
-    "mithril": "2.0.0-rc.4",
     "rimraf": "^2.6.3"
   },
   "peerDependencies": {
-    "mithril": "2.0.0-rc.4"
+    "mithril": "2.0.0-rc.6"
   }
 }
