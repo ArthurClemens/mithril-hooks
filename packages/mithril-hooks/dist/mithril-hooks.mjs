@@ -15,74 +15,51 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _objectSpread(target) {
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
 
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
+    if (i % 2) {
+      ownKeys(source, true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(source).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
     }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
   }
 
   return target;
 }
 
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
-}
+var currentState;
+var call = Function.prototype.call.bind(Function.prototype.call);
 
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-
-function _iterableToArrayLimit(arr, i) {
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
-}
-
-let currentState;
-const call = Function.prototype.call.bind(Function.prototype.call);
-
-const scheduleRender = () => // Call m within the function body so environments with a global instance of m (like flems.io) don't complain
+var scheduleRender = () => // Call m within the function body so environments with a global instance of m (like flems.io) don't complain
 m.redraw();
 
-const updateDeps = deps => {
-  const state = currentState;
-  const index = state.depsIndex++;
-  const prevDeps = state.depsStates[index] || [];
-  const shouldRecompute = deps === undefined ? true // Always compute
+var updateDeps = deps => {
+  var state = currentState;
+  var index = state.depsIndex++;
+  var prevDeps = state.depsStates[index] || [];
+  var shouldRecompute = deps === undefined ? true // Always compute
   : Array.isArray(deps) ? deps.length > 0 ? !deps.every((x, i) => x === prevDeps[i]) // Only compute when one of the deps has changed
   : !state.setup // Empty array: only compute at mount
   : false; // Invalid value, do nothing
@@ -91,15 +68,15 @@ const updateDeps = deps => {
   return shouldRecompute;
 };
 
-const effect = function effect() {
-  let isAsync = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+var effect = function effect() {
+  var isAsync = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   return (fn, deps) => {
-    const state = currentState;
-    const shouldRecompute = updateDeps(deps);
+    var state = currentState;
+    var shouldRecompute = updateDeps(deps);
 
     if (shouldRecompute) {
-      const runCallbackFn = () => {
-        const teardown = fn(); // A callback may return a function. If any, add it to the teardowns:
+      var runCallbackFn = () => {
+        var teardown = fn(); // A callback may return a function. If any, add it to the teardowns:
 
         if (typeof teardown === "function") {
           // Store this this function to be called at unmount
@@ -114,18 +91,18 @@ const effect = function effect() {
   };
 };
 
-const updateState = function updateState(initialValue) {
-  let newValueFn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : value => value;
-  const state = currentState;
-  const index = state.statesIndex++;
+var updateState = function updateState(initialValue) {
+  var newValueFn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : value => value;
+  var state = currentState;
+  var index = state.statesIndex++;
 
   if (!state.setup) {
     state.states[index] = initialValue;
   }
 
   return [state.states[index], value => {
-    const previousValue = state.states[index];
-    const newValue = newValueFn(value, index);
+    var previousValue = state.states[index];
+    var newValue = newValueFn(value, index);
     state.states[index] = newValue;
 
     if (JSON.stringify(newValue) !== JSON.stringify(previousValue)) {
@@ -134,29 +111,25 @@ const updateState = function updateState(initialValue) {
   }, index];
 };
 
-const useState = initialValue => {
-  const state = currentState;
+var useState = initialValue => {
+  var state = currentState;
 
-  const newValueFn = (value, index) => typeof value === "function" ? value(state.states[index]) : value;
+  var newValueFn = (value, index) => typeof value === "function" ? value(state.states[index]) : value;
 
   return updateState(initialValue, newValueFn);
 };
-const useEffect = effect(true);
-const useLayoutEffect = effect();
-const useReducer = (reducer, initialArg, initFn) => {
-  const state = currentState; // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialArg).
+var useEffect = effect(true);
+var useLayoutEffect = effect();
+var useReducer = (reducer, initialArg, initFn) => {
+  var state = currentState; // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialArg).
 
-  const initialValue = !state.setup && initFn ? initFn(initialArg) : initialArg;
+  var initialValue = !state.setup && initFn ? initFn(initialArg) : initialArg;
 
-  const getValueDispatch = () => {
-    const _updateState = updateState(initialValue),
-          _updateState2 = _slicedToArray(_updateState, 3),
-          value = _updateState2[0],
-          setValue = _updateState2[1],
-          index = _updateState2[2];
+  var getValueDispatch = () => {
+    var [value, setValue, index] = updateState(initialValue);
 
-    const dispatch = action => {
-      const previousValue = state.states[index];
+    var dispatch = action => {
+      var previousValue = state.states[index];
       return setValue( // Next state:
       reducer(previousValue, action));
     };
@@ -166,24 +139,17 @@ const useReducer = (reducer, initialArg, initFn) => {
 
   return getValueDispatch();
 };
-const useRef = initialValue => {
+var useRef = initialValue => {
   // A ref is a persisted object that will not be updated, so it has no setter
-  const _updateState3 = updateState({
+  var [value] = updateState({
     current: initialValue
-  }),
-        _updateState4 = _slicedToArray(_updateState3, 1),
-        value = _updateState4[0];
-
+  });
   return value;
 };
-const useMemo = (fn, deps) => {
-  const state = currentState;
-  const shouldRecompute = updateDeps(deps);
-
-  const _ref = !state.setup ? updateState(fn()) : updateState(),
-        _ref2 = _slicedToArray(_ref, 2),
-        memoized = _ref2[0],
-        setMemoized = _ref2[1];
+var useMemo = (fn, deps) => {
+  var state = currentState;
+  var shouldRecompute = updateDeps(deps);
+  var [memoized, setMemoized] = !state.setup ? updateState(fn()) : updateState();
 
   if (state.setup && shouldRecompute) {
     setMemoized(fn());
@@ -191,9 +157,9 @@ const useMemo = (fn, deps) => {
 
   return memoized;
 };
-const useCallback = (fn, deps) => useMemo(() => fn, deps);
-const withHooks = (component, initialProps) => {
-  const init = vnode => {
+var useCallback = (fn, deps) => useMemo(() => fn, deps);
+var withHooks = (component, initialProps) => {
+  var init = vnode => {
     Object.assign(vnode.state, {
       setup: false,
       states: [],
@@ -206,8 +172,8 @@ const withHooks = (component, initialProps) => {
     });
   };
 
-  const update = vnode => {
-    const prevState = currentState;
+  var update = vnode => {
+    var prevState = currentState;
     currentState = vnode.state;
 
     try {
@@ -223,12 +189,12 @@ const withHooks = (component, initialProps) => {
     }
   };
 
-  const render = vnode => {
-    const prevState = currentState;
+  var render = vnode => {
+    var prevState = currentState;
     currentState = vnode.state;
 
     try {
-      return component(_objectSpread({}, initialProps, vnode.attrs, {
+      return component(_objectSpread2({}, initialProps, {}, vnode.attrs, {
         vnode,
         children: vnode.children
       }));
@@ -239,8 +205,8 @@ const withHooks = (component, initialProps) => {
     }
   };
 
-  const teardown = vnode => {
-    const prevState = currentState;
+  var teardown = vnode => {
+    var prevState = currentState;
     currentState = vnode.state;
 
     try {

@@ -41,9 +41,9 @@ const tests = [
 
 const link = (href, currentRoute, label) => 
   m("li",
-    m("a", {
+    m(m.route.Link, {
+      selector: "a",
       href,
-      oncreate: m.route.link,
       className: href === currentRoute ? "is-active" : ""
     },
     label)
