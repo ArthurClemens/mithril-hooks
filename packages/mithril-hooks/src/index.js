@@ -12,8 +12,8 @@ const scheduleRender = () =>
 
 const updateDeps = deps => {
   const state = currentState;
-  const index = state.depsIndex++;
-  const prevDeps = state.depsStates[index] || [];
+  const depsIndex = state.depsIndex++;
+  const prevDeps = state.depsStates[depsIndex] || [];
   const shouldRecompute = deps === undefined
     ? true // Always compute
     : Array.isArray(deps)
@@ -21,7 +21,7 @@ const updateDeps = deps => {
         ? !deps.every((x,i) => x === prevDeps[i]) // Only compute when one of the deps has changed
         : !state.setup // Empty array: only compute at mount
       : false; // Invalid value, do nothing
-  state.depsStates[index] = deps;
+  state.depsStates[depsIndex] = deps;
   return shouldRecompute;
 };
 
@@ -29,16 +29,29 @@ const effect = (isAsync = false) => (fn, deps) => {
   const state = currentState;
   const shouldRecompute = updateDeps(deps);
   if (shouldRecompute) {
+    const depsIndex = state.depsIndex;
     const runCallbackFn = () => {
       const teardown = fn();
       // A callback may return a function. If any, add it to the teardowns:
       if (typeof teardown === "function") {
-        // Store this this function to be called at unmount
-        state.teardowns.set(fn, teardown);
+        // Store this this function to be called at cleanup and unmount
+        state.teardowns.set(depsIndex, teardown);
         // At unmount, call re-render at least once
         state.teardowns.set("_", scheduleRender);
       }
     };
+
+    // First clean up any previous cleanup function
+    const teardown = state.teardowns.get(depsIndex);
+    try {
+      if (typeof teardown === "function") {
+        teardown();
+      }
+    }
+    finally {
+      state.teardowns.delete(depsIndex);
+    }
+
     state.updates.push(
       isAsync
         ? () => new Promise(resolve => requestAnimationFrame(resolve)).then(runCallbackFn)
@@ -131,7 +144,8 @@ export const withHooks = (component, initialProps) => {
       depsStates: [],
       depsIndex: 0,
       updates: [],
-      teardowns: new Map // Keep track of teardowns even when the update was run only once
+      cleanups: new Map(),
+      teardowns: new Map, // Keep track of teardowns even when the update was run only once
     });
   };
   
