@@ -1,27 +1,40 @@
 {
   "name": "mithril-hooks",
   "version": "0.5.6",
-  "description": "Hooks for Mithril",
+  "description": "Use hooks with Mithril",
   "main": "dist/mithril-hooks",
   "module": "dist/mithril-hooks.mjs",
+  "type": "module",
   "scripts": {
-    "lint": "eslint ./src",
-    "build": "npm run clean && npm run rollup",
-    "rollup": "../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.umd.js && ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.es.js",
-    "clean": "rimraf dist/*",
-    "size": "gzip -c dist/mithril-hooks.js | wc -c"
+    "npm-check-updates": "../../node_modules/npm-check-updates/bin/ncu -u",
+    "clean": "rm -rf dist/*",
+    "build": "npm run clean && npm run build:module && npm run build:umd && npm run size",
+    "build:module": "TYPESCRIPT=1 ENTRY=src/index.ts MODULE=1 MODULE_NAME=mithrilHooks ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
+    "build:umd": "TYPESCRIPT=1 ENTRY=src/index.ts MODULE=0 MODULE_NAME=mithrilHooks ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
+    "size": "size-limit",
+    "size:why": "size-limit --why",
+    "prettier": "prettier --config ../../.prettierrc.json --write \"./{src,scripts}/**/*.{js,jsx,ts,tsx,ejs}\""
   },
+  "size-limit": [
+    {
+      "path": "dist/mithril-hooks.js"
+    }
+  ],
   "files": [
     "dist",
+    "index.d.ts",
     "README.md"
   ],
   "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
   "homepage": "https://github.com/ArthurClemens/mithril-hooks",
   "license": "MIT",
   "devDependencies": {
-    "rimraf": "^3.0.0"
+    "@size-limit/preset-small-lib": "^4.5.5",
+    "@types/mithril": "2.0.3",
+    "rimraf": "^3.0.2",
+    "size-limit": "^4.5.5"
   },
   "peerDependencies": {
-    "mithril": ">=2.0.4"
+    "mithril": "^2.0.4"
   }
 }

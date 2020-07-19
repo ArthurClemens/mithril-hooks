@@ -1,17 +1,18 @@
 # mithril-hooks
 
-Use hooks in Mithril.
+Use hooks with Mithril.
 
 - [Introduction](#introduction)
 - [Online demos](#online-demos)
 - [Usage](#usage)
-  - [Signature](#signature)
   - [Example](#example)
   - [Hooks and application logic](#hooks-and-application-logic)
   - [Rendering rules](#rendering-rules)
     - [With useState](#with-usestate)
     - [With other hooks](#with-other-hooks)
     - [Cleaning up](#cleaning-up)
+- [API](#api)
+  - [withHooks](#withhooks)
   - [Default hooks](#default-hooks)
     - [useState](#usestate)
     - [useEffect](#useeffect)
@@ -60,61 +61,46 @@ Editable demos using the [Flems playground](https://flems.io/#0=N4IgZglgNgpgziAX
 npm install mithril-hooks
 ```
 
-Use in code:
-
-```javascript
-import { withHooks /*, useState and other hooks */ } from "mithril-hooks"
+```ts
+import { withHooks, useState /* and other hooks */ } from "mithril-hooks";
 ```
-
-### Signature
-
-`withHooks(renderFunction, initialProps) => HookedComponent`
-
-| **Argument**    | **Type**  | **Required** | **Description** |
-| --- | --- | --- | --- | 
-| `renderFunction` | Function | Yes | Function ("functional component") that will handle hooks |
-| `initialProps`  | Object | No | Any variable to pass to `renderFunction` | 
-
-The returned `HookedComponent` can be called as any Mithril component:
-
-```javascript
-m(HookedComponent, {
-  // component props
-})
-```
-
-`renderFunction` will receive a combined object of `initialProps` and component props.
-
 
 ### Example
 
-```javascript
-// counter.js
+```ts
+// Toggle.ts
 
-import { withHooks, useState } from "mithril-hooks"
+import m from 'mithril';
+import { withHooks, useState } from 'mithril-hooks';
 
-const Counter = ({ title, defaultTitle, initialCount }) => {
-  const [count, setCount] = useState(initialCount)
-  return [
-    m("h2", title || defaultTitle),
-    m("div", count),
-    m("button", {
-      onclick: () => setCount(count + 1)
-    }, "More")
-  ]
-}
+type TAttrs = {
+  isOn?: boolean;
+};
 
-export default withHooks(Counter, { defaultTitle: "Counter" })
+const ToggleFn = (attrs?: TAttrs) => {
+  const [isOn, setIsOn] = useState(attrs.isOn);
+
+  return m('.toggle', [
+    m('button',
+      {
+        onclick: () => setIsOn(current => !current),
+      },
+      'Toggle',
+    ),
+    m('div', isOn ? 'On' : 'Off'),
+  ]);
+};
+
+export const Toggle = withHooks<TAttrs>(ToggleFn);
 ```
 
 Use the counter:
-```javascript
-// app.js
+```ts
+import { Toggle } from "./Toggle"
 
-import Counter from "./Counter"
-
-m(Counter, { initialCount: 0, title: "Hello" })
+m(Toggle, { isOn: true })
 ```
+
 
 
 ### Hooks and application logic
@@ -136,7 +122,7 @@ Mithril's `redraw` is called when the state is initially set, and every time a s
 
 Hook functions are always called at the first render.
 
-For subsequent renders, an optional second parameter can be passed to define if it should rerun:
+For subsequent renders, a dependency list can be passed as second parameter to instruct when it should rerun:
 
 ```javascript
 useEffect(
@@ -147,7 +133,7 @@ useEffect(
 )
 ```
 
-mithril-hooks follows the React Hooks API:
+For the dependency list, `mithril-hooks` follows the React Hooks API:
 
 * Without a second argument: will run every render (Mithril lifecycle function [view](https://mithril.js.org/index.html#components)).
 * With an empty array: will only run at mount (Mithril lifecycle function [oncreate](https://mithril.js.org/lifecycle-methods.html#oncreate)).
@@ -159,7 +145,7 @@ Note that effect hooks do not cause a re-render themselves.
 
 #### Cleaning up
 
-If a hook function returns a function, that function is called at unmount (Mithril lifecycle function [onremove](https://mithril.js.org/lifecycle-methods.html#onremove)).
+If `useEffect` returns a function, that function is called at unmount (Mithril lifecycle function [onremove](https://mithril.js.org/lifecycle-methods.html#onremove)).
 
 ```javascript
 useEffect(
@@ -177,6 +163,63 @@ useEffect(
 At cleanup Mithril's `redraw` is called.
 
 
+## API
+
+### withHooks
+
+Higher order function that returns a component that works with hook functions.
+
+
+```ts
+type TAttrs = {};
+
+const RenderFn = (attrs?: TAttrs) => {
+  // Use hooks...
+  return m('div', '...')
+};
+
+export const HookedComponent = withHooks<TAttrs>(RenderFn);
+```
+
+The returned `HookedComponent` can be called as any Mithril component:
+
+```ts
+m(HookedComponent, {
+  // ... attributes
+})
+```
+
+**Options**
+
+| **Argument**     | **Type** | **Required** | **Description**                        |
+| ---------------- | -------- | ------------ | -------------------------------------- |
+| `renderFunction` | Function | Yes          | Function with view logic               |
+| `attrs`          | Object   | No           | Attributes to pass to `renderFunction` |
+
+
+**Signature**
+
+```ts
+const withHooks: <T>(
+  renderFunction: (attrs?: T) => Vnode<T, {}> | Children,
+  initialAttrs?: T
+) => Component<T, {}>;
+```
+
+`withHooks` also receives `vnode` and `children`, where `vnode` includes the hook state. Extended signature:
+
+```ts
+const withHooks: <T>(
+  renderFunction: (
+    attrs?: T & { vnode: Vnode<T, MithrilHooks.State>; children: Children },
+  ) => Vnode<T, MithrilHooks.State> | Children,
+  initialAttrs?: T,
+) => Component<T, MithrilHooks.State>;
+```
+
+
+
+
 ### Default hooks
 
 The [React Hooks documentation](https://reactjs.org/docs/hooks-intro.html) provides excellent usage examples for default hooks. Let us suffice here with shorter descriptions.
@@ -186,14 +229,14 @@ The [React Hooks documentation](https://reactjs.org/docs/hooks-intro.html) provi
 
 Provides the state value and a setter function:
 
-```javascript
+```ts
 const [count, setCount] = useState(0)
 ```
 
 The setter function itself can pass a function - useful when values might otherwise be cached:
 
 ```javascript
-setTicks(ticks => ticks + 1)
+setCount(current => current + 1)
 ```
 
 A setter function can be called from another hook:
@@ -207,6 +250,15 @@ useEffect(
   },
   [/* empty array: only run at mount */]
 )
+```
+
+**Signature**
+
+```ts
+const useState: <T>(initialValue?: T) => [
+  T,
+  (value: T | ((currentValue: T, index: number) => T)) => void
+];
 ```
 
 
@@ -229,6 +281,14 @@ useEffect(
 )
 ```
 
+**Signature**
+
+```ts
+const useEffect: (
+  fn: () => unknown | (() => unknown),
+  deps?: unknown[],
+) => void;
+```
 
 #### useLayoutEffect
 
@@ -243,6 +303,15 @@ useLayoutEffect(
 )
 ```
 
+**Signature**
+
+```ts
+const useLayoutEffect: (
+  fn: () => unknown | (() => unknown),
+  deps?: unknown[],
+) => void;
+```
+
 #### useReducer
 
 From the [React docs](https://reactjs.org/docs/hooks-reference.html#usereducer):
@@ -253,23 +322,36 @@ From the [React docs](https://reactjs.org/docs/hooks-reference.html#usereducer):
 
 Example:
 
-```javascript
-import { withHooks, useReducer } from "mithril-hooks"
+```ts
+import { withHooks, useReducer } from "mithril-hooks";
 
-const counterReducer = (state, action) => {
+type TState = {
+  count: number;
+};
+
+type TAction = {
+  type: string;
+};
+
+const counterReducer = (state: TState, action: TAction) => {
   switch (action.type) {
-    case "increment":
-      return { count: state.count + 1 }
-    case "decrement":
-      return { count: state.count - 1 }
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
     default:
-      throw new Error("Unhandled action:", action)
+      throw new Error(`Unhandled action: ${action}`);
   }
-}
+};
 
-const Counter = ({ initialCount }) => {
+type TCounterAttrs = {
+  initialCount: number;
+};
+
+const CounterFn = (attrs: TCounterAttrs) => {
+  const { initialCount } = attrs;
   const initialState = { count: initialCount }
-  const [countState, dispatch] = useReducer(counterReducer, initialState)
+  const [countState, dispatch] = useReducer<TState, TAction>(counterReducer, initialState)
   const count = countState.count
 
   return [
@@ -282,25 +364,36 @@ const Counter = ({ initialCount }) => {
       onclick: () => dispatch({ type: "increment" })
     }, "More")
   ]
-}
+};
 
-const HookedCounter = withHooks(Counter)
+const Counter = withHooks(CounterFn);
 
-m(HookedCounter, { initialCount: 0 })
+m(Counter, { initialCount: 0 })
 ```
 
+**Signature**
+
+```ts
+const useReducer: <T, A = void>(
+  reducer: Reducer<T, A>,
+  initialValue?: T | U,
+  initFn?: (args: U) => T,
+) => [T, (action: A) => void];
+
+type Reducer<T, A> = (state: T, action: A) => T;
+```
 
 #### useRef
 
 The "ref" object is a generic container whose `current` property is mutable and can hold any value.
 
-```javascript
-const dom = useRef(null)
+```ts
+const domRef = useRef<HTMLDivElement>(null)
 
 return [
   m("div",
     {
-      oncreate: vnode => dom.current = vnode.dom
+      oncreate: vnode => dom.current = vnode.dom as HTMLDivElement
     },
     count
   )
@@ -309,12 +402,12 @@ return [
 
 To keep track of a value:
 
-```javascript
-import { withHooks, useState, useEffect, useRef } from "mithril-hooks"
+```ts
+import { withHooks, useState, useEffect, useRef } from "mithril-hooks";
 
-const Timer = () => {
+const TimerFn = () => {
   const [ticks, setTicks] = useState(0)
-  const intervalRef = useRef()
+  const intervalRef = useRef<number>()
   
   const handleCancelClick = () => {
     clearInterval(intervalRef.current)
@@ -345,30 +438,50 @@ const Timer = () => {
       "Cancel"
     )
   ]
-}
+};
 
-const HookedTimer = withHooks(Timer)
+const Timer = withHooks(TimerFn);
 ```
 
+**Signature**
+
+```ts
+const useRef: <T>(initialValue?: T) => { current: T };
+```
 
 #### useMemo
 
 Returns a memoized value.
 
-```javascript
-import { withHooks, useMemo } from "mithril-hooks"
+```ts
+import { withHooks, useMemo } from "mithril-hooks";
 
-const Counter = ({ count, useMemo }) => {
+const computeExpensiveValue = (count: number): number => {
+  // some computationally expensive function
+  return count + Math.random();
+};
+
+const CounterFn = ({ count, useMemo }) => {
   const memoizedValue = useMemo(
     () => {
       return computeExpensiveValue(count)
     },
     [count] // only recalculate when count is updated
   )
-  // ...
-}
+  // Render ...
+};
 ```
 
+**Signature**
+
+```ts
+const useMemo: <T>(
+  fn: MemoFn<T>,
+  deps?: unknown[],
+) => T;
+
+type MemoFn<T> = () => T;
+```
 
 #### useCallback
 
@@ -376,25 +489,36 @@ Returns a memoized callback.
 
 The function reference is unchanged in next renders (which makes a difference in performance expecially in React), but its return value will not be memoized.
 
-```javascript
-let previousCallback = null
+```ts
+const someCallback = (): number => {
+  return Math.random();
+};
 
-const memoizedCallback = useCallback(
-  () => {
-    doSomething(a, b)
-  },
-  [a, b]
-)
+type TCallback = () => void;
+let previousCallback: TCallback;
 
-// Testing for reference equality:
-if (previousCallback !== memoizedCallback) {
-  // New callback function created
-  previousCallback = memoizedCallback
-  memoizedCallback()
-} else {
-  // Callback function is identical to the previous render
-}
+const CallbackFn = () => {
+  const [someValue, setSomeValue] = useState(0);
+
+  const memoizedCallback = useCallback(() => {
+    return someCallback();
+  }, [someValue]);
+
+  // Render ...
+};
 ```
+
+**Signature**
+
+```ts
+const const useCallback: <T>(
+  fn: MemoFn<T>,
+  deps?: unknown[],
+) => MemoFn<T>;
+
+type MemoFn<T> = () => T;
+```
+
 
 #### Omitted hooks
 
@@ -406,9 +530,9 @@ These React hooks make little sense with Mithril and are not included:
 
 ### Custom hooks
 
-```javascript
-// useCount.js
-import { useState } from "mithril-hooks"
+```ts
+// useCount.ts
+import { useState } from "mithril-hooks";
 
 export const useCount = (initialValue = 0) => {
   const [count, setCount] = useState(initialValue)
@@ -422,12 +546,16 @@ export const useCount = (initialValue = 0) => {
 
 Then use the custom hook:
 
-```javascript
-// app.js
-import { withHooks } from "mithril-hooks"
-import { useCount } from "./useCount"
+```ts
+// app.ts
+import { withHooks } from "mithril-hooks";
+import { useCount } from "./useCount";
 
-const Counter = ({ initialCount }) => {
+type TCounterAttrs = {
+  initialCount: number;
+};
+
+const CounterFn = ({ initialCount }: TCounterAttrs) => {
   const [count, increment, decrement] = useCount(initialCount)
   return m("div", [
     m("p", 
@@ -449,29 +577,34 @@ const Counter = ({ initialCount }) => {
   ])
 }
 
-const HookedCounter = withHooks(Counter)
+const Counter = withHooks(CounterFn);
 
-m(HookedCounter, { initialCount: 0 })
+m(Counter, { initialCount: 0 });
 ```
 
 ### Children
 
-Child elements are accessed through the variable `children`:
+Child elements can be accessed through the variable `children`:
 
-```javascript
-import { withHooks, useState } from "mithril-hooks"
+```ts
+import m, { Children } from 'mithril';
+import { withHooks, useState } from "mithril-hooks";
 
-const Counter = ({ initialCount, children }) => {
+type TCounterAttrs = {
+  title: string;
+};
+const CounterFn = (attrs: TCounterAttrs & { children: Children }) => {
+  const { initialCount, children } = attrs;
   const [count, setCount] = useState(initialCount)
   return [
     m("div", count),
     children
   ]
-}
+};
 
-const HookedCounter = withHooks(Counter)
+const Counter = withHooks<TCounterAttrs>(CounterFn);
 
-m(HookedCounter,
+m(Counter,
   { initialCount: 1 },
   [
     m("div", "This is a child element")
@@ -494,27 +627,29 @@ Tested with Mithril 1.1.6 and Mithril 2.x.
 Output from `npx browserslist`:
 
 ```
-and_chr 71
-and_ff 64
-and_qq 1.2
-and_uc 11.8
-android 67
+and_chr 81
+and_ff 68
+and_qq 10.4
+and_uc 12.12
+android 81
 baidu 7.12
-chrome 72
-chrome 71
+chrome 83
+chrome 81
+edge 83
 edge 18
-edge 17
-firefox 65
-firefox 64
+firefox 78
+firefox 77
 ie 11
-ie_mob 11
-ios_saf 12.0-12.1
-ios_saf 11.3-11.4
+ios_saf 13.4-13.5
+ios_saf 13.3
+ios_saf 12.2-12.4
+kaios 2.5
 op_mini all
 op_mob 46
-opera 57
-safari 12
-samsung 8.2
+opera 69
+safari 13.1
+samsung 12.0
+samsung 11.1-11.2
 ```
 
 ## History

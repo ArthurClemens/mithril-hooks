@@ -1,78 +1,75 @@
 /* global process */
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackModules = require('webpack-modules');
 
 const baseDir = process.cwd();
 const env = process.env; // eslint-disable-line no-undef
 
-const createConfig = isProduction => ({
-
-  context: path.resolve(baseDir, "./src"),
+module.exports = {
+  context: path.resolve(baseDir, './src'),
 
   entry: {
-    index: path.resolve(baseDir, env.ENTRY || "./src/index.js"),
+    index: path.resolve(baseDir, env.ENTRY || './src/index.ts'),
   },
 
   output: {
-    path: path.resolve(baseDir, "./dist"),
-    filename: "js/[name].js"
+    path: path.resolve(baseDir, './dist'),
+    filename: 'js/[name].js',
   },
 
   resolve: {
-    // Make sure that Mithril is included only once
+    // Make sure that libs are included only once
     alias: {
-      "mithril/stream": path.resolve(baseDir, "node_modules/mithril/stream/stream.js"),
-      // Keep in this order!
-      "mithril": path.resolve(baseDir, "node_modules/mithril/mithril.js"),
+      mithril$: path.resolve(baseDir, 'node_modules/mithril/mithril.js'), // Note the exact match
+      react: path.resolve(baseDir, 'node_modules/react'),
     },
-    extensions: [".mjs", ".js", ".jsx", ".ts", ".tsx"],
+    extensions: ['.mjs', '.js', '.ts'],
   },
 
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: [
-          { loader: "ts-loader" }
-        ]
+        exclude: /node_modules/,
+        use: [{ loader: 'ts-loader' }],
       },
       {
         test: /\.m?js$/,
         exclude: /node_modules/,
-        use: [{
-          loader: "babel-loader",
-          options: {
-            configFile: isProduction
-              ? "../../babel.config.umd.js"
-              : "../../babel.config.es.js"
-          }
-        }]
+        type: 'javascript/auto',
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              configFile: '../../babel.config.js',
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
           {
-            loader: "css-loader",
+            loader: MiniCssExtractPlugin.loader,
             options: {
               modules: true,
               sourceMap: true,
-              localIdentName: "[local]"
-            }
+              localIdentName: '[local]',
+            },
           },
-        ]
-      }
-    ]
+          'css-loader',
+        ],
+      },
+    ],
   },
 
   plugins: [
+    new WebpackModules(),
     new MiniCssExtractPlugin({
-      filename: "css/app.css"
+      filename: 'css/app.css',
     }),
   ],
 
-  devtool: "source-map"
-
-});
-
-module.exports = createConfig;
+  devtool: 'source-map',
+};
