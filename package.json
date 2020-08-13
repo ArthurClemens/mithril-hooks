@@ -1,6 +1,6 @@
 {
   "name": "mithril-hooks-repo",
-  "version": "0.5.5",
+  "version": "0.6.1",
   "private": true,
   "description": "Use hooks with Mithril",
   "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
