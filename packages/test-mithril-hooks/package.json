@@ -28,9 +28,9 @@
     "http-server": "^0.12.3",
     "mithril-node-render": "3.0.0",
     "mithril-query": "^3.1.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.1",
     "npm-run-all": "4.1.5",
     "rimraf": "^3.0.2",
-    "start-server-and-test": "^1.11.2"
+    "start-server-and-test": "^1.11.3"
   }
 }
