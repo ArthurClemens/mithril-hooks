@@ -1,6 +1,6 @@
 {
   "name": "test-mithril-hooks",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": true,
   "scripts": {
     "lint": "eslint ./src",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "mithril": "2.0.4",
-    "mithril-hooks": "^0.6.1"
+    "mithril-hooks": "^0.6.2"
   },
   "devDependencies": {
     "@types/mithril": "2.0.3",
