@@ -5,7 +5,7 @@ type TAttrs = {
   isOn?: boolean;
 };
 
-const ToggleFn = (attrs?: TAttrs) => {
+const ToggleFn = (attrs: TAttrs) => {
   const [isOn, setIsOn] = useState(attrs.isOn);
 
   return m('.toggle', [

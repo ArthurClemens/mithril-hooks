@@ -3,7 +3,7 @@ import { DependencyList, EffectCallback } from 'react';
 
 export const withHooks: <T>(
   renderFunction: (
-    attrs?: T & { vnode: Vnode<T, MithrilHooks.State>; children: Children },
+    attrs: T & { vnode: Vnode<T, MithrilHooks.State>; children: Children },
   ) => Vnode<T, MithrilHooks.State> | Children,
   initialAttrs?: T,
 ) => Component<T, MithrilHooks.State>;

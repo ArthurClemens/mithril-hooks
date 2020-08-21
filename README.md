@@ -176,8 +176,9 @@ Higher order function that returns a component that works with hook functions.
 type TAttrs = {};
 
 const RenderFn = (attrs?: TAttrs) => {
-  // Use hooks...
-  return m('div', '...')
+  // Use hooks ...
+  // Return a view:
+  return m('div', 'My view')
 };
 
 export const HookedComponent = withHooks<TAttrs>(RenderFn);
@@ -187,7 +188,7 @@ The returned `HookedComponent` can be called as any Mithril component:
 
 ```ts
 m(HookedComponent, {
-  // ... attributes
+  // ... attrs
 })
 ```
 
@@ -203,7 +204,7 @@ m(HookedComponent, {
 
 ```ts
 const withHooks: <T>(
-  renderFunction: (attrs?: T) => Vnode<T, {}> | Children,
+  renderFunction: (attrs: T) => Vnode<T, {}> | Children,
   initialAttrs?: T
 ) => Component<T, {}>;
 ```
@@ -213,7 +214,7 @@ const withHooks: <T>(
 ```ts
 const withHooks: <T>(
   renderFunction: (
-    attrs?: T & { vnode: Vnode<T, MithrilHooks.State>; children: Children },
+    attrs: T & { vnode: Vnode<T, MithrilHooks.State>; children: Children },
   ) => Vnode<T, MithrilHooks.State> | Children,
   initialAttrs?: T,
 ) => Component<T, MithrilHooks.State>;
