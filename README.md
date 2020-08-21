@@ -24,6 +24,8 @@ Use hooks with Mithril.
     - [Omitted hooks](#omitted-hooks)
   - [Custom hooks](#custom-hooks)
   - [Children](#children)
+- [Troubleshooting](#troubleshooting)
+  - [TypeError: Cannot read property 'depsIndex' of undefined](#typeerror-cannot-read-property-depsindex-of-undefined)
 - [Compatibility](#compatibility)
 - [Size](#size)
 - [Supported browsers](#supported-browsers)
@@ -611,6 +613,25 @@ m(Counter,
   ]
 )
 ```
+
+
+## Troubleshooting
+
+### TypeError: Cannot read property 'depsIndex' of undefined
+
+Possibly several instances of `mithril-hooks` are referenced. Prevent this by pointing the transpiler to a single instance.
+
+When using Webpack, add to the config:
+
+```js
+resolve: {
+  // Make sure that libs are included only once
+  alias: {
+    'mithril-hooks': path.resolve(baseDir, 'node_modules/mithril-hooks'),
+  },
+},
+```
+
 
 ## Compatibility
 
