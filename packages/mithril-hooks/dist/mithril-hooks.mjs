@@ -51,11 +51,11 @@ const effect = (isAsync = false) => (fn, deps) => {
             : runCallbackFn);
     }
 };
-const updateState = (initialValue, newValueFn) => {
+const updateState = (initialState, newValueFn) => {
     const state = currentState;
     const index = state.statesIndex++;
     if (!state.setup) {
-        state.states[index] = initialValue;
+        state.states[index] = initialState;
     }
     return [
         state.states[index],
@@ -70,19 +70,19 @@ const updateState = (initialValue, newValueFn) => {
         index,
     ];
 };
-const useState = (initialValue) => {
+const useState = (initialState) => {
     const state = currentState;
     const newValueFn = (value, index) => typeof value === 'function'
         ? value(state.states[index], index)
         : value;
-    return updateState(initialValue, newValueFn);
+    return updateState(initialState, newValueFn);
 };
 const useEffect = effect(true);
 const useLayoutEffect = effect();
-const useReducer = (reducer, initialValue, initFn) => {
+const useReducer = (reducer, initialState, initFn) => {
     const state = currentState;
     // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialValue).
-    const initValue = !state.setup && initFn ? initFn(initialValue) : initialValue;
+    const initValue = !state.setup && initFn ? initFn(initialState) : initialState;
     const getValueDispatch = () => {
         const [value, setValue, index] = updateState(initValue);
         const dispatch = (action) => {
@@ -111,7 +111,7 @@ const useMemo = (fn, deps) => {
     }
     return memoized;
 };
-const useCallback = (fn, deps) => useMemo(() => fn, deps);
+const useCallback = (callback, deps) => useMemo(() => callback, deps);
 const withHooks = (renderFunction, initialAttrs) => {
     const init = (vnode) => {
         Object.assign(vnode.state, {

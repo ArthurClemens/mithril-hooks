@@ -1,4 +1,5 @@
 import { Component, Vnode, Children } from 'mithril';
+import { DependencyList, EffectCallback } from 'react';
 
 export const withHooks: <T>(
   renderFunction: (
@@ -12,13 +13,13 @@ export const useState: <T>(
 ) => [T, (value: MithrilHooks.ValueOrFn<T>) => void];
 
 export const useEffect: (
-  fn: MithrilHooks.EffectFn,
-  deps?: MithrilHooks.Deps,
+  fn: EffectCallback,
+  deps?: DependencyList,
 ) => void;
 
 export const useLayoutEffect: (
-  fn: MithrilHooks.EffectFn,
-  deps?: MithrilHooks.Deps,
+  fn: EffectCallback,
+  deps?: DependencyList,
 ) => void;
 
 export const useReducer: <T, A = void>(
@@ -35,16 +36,15 @@ export const useRef: <T>(
 
 export const useMemo: <T>(
   fn: MithrilHooks.MemoFn<T>,
-  deps?: MithrilHooks.Deps,
+  deps?: DependencyList,
 ) => T;
 
 export const useCallback: <T>(
   fn: MithrilHooks.MemoFn<T>,
-  deps?: MithrilHooks.Deps,
+  deps?: DependencyList,
 ) => MithrilHooks.MemoFn<T>;
 
 export namespace MithrilHooks {
-  type Deps = unknown[];
   type TearDownFn = () => void;
   type UpdateFn = () => void;
   type MemoFn<T> = () => T;
@@ -52,7 +52,6 @@ export namespace MithrilHooks {
   type ValueOrFn<T> = T | ValueFn<T>;
   type NewValueFn<T> = (value: ValueOrFn<T>, index: number) => T;
   type EffectReturnFn = () => unknown;
-  type EffectFn = () => unknown | EffectReturnFn;
   type Reducer<T, A> = (state: T, action: A) => T;
 
   type State = {

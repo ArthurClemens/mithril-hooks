@@ -1,4 +1,5 @@
 import m, { Vnode, VnodeDOM, Component, Children } from 'mithril';
+import { DependencyList, EffectCallback } from 'react';
 import { MithrilHooks } from '..';
 
 let currentState: MithrilHooks.State;
@@ -9,7 +10,7 @@ const scheduleRender = () =>
   // Call m within the function body so environments with a global instance of m (like flems.io) don't complain
   m.redraw();
 
-const updateDeps = (deps?: MithrilHooks.Deps) => {
+const updateDeps = (deps?: DependencyList) => {
   const state = currentState;
   const depsIndex = state.depsIndex++;
   const prevDeps = state.depsStates[depsIndex] || [];
@@ -28,8 +29,8 @@ const updateDeps = (deps?: MithrilHooks.Deps) => {
 };
 
 const effect = (isAsync = false) => (
-  fn: MithrilHooks.EffectFn,
-  deps?: MithrilHooks.Deps,
+  fn: EffectCallback,
+  deps?: DependencyList,
 ) => {
   const state = currentState;
   const shouldRecompute = updateDeps(deps);
@@ -68,13 +69,13 @@ const effect = (isAsync = false) => (
 };
 
 const updateState = <T>(
-  initialValue?: T,
+  initialState?: T,
   newValueFn?: MithrilHooks.NewValueFn<T>,
 ): [T, (value: MithrilHooks.ValueOrFn<T>) => void, number] => {
   const state = currentState;
   const index = state.statesIndex++;
   if (!state.setup) {
-    state.states[index] = initialValue;
+    state.states[index] = initialState;
   }
   return [
     state.states[index] as T,
@@ -91,14 +92,14 @@ const updateState = <T>(
 };
 
 export const useState = <T>(
-  initialValue: T,
+  initialState: T,
 ): [T, (value: MithrilHooks.ValueOrFn<T>) => void, number] => {
   const state = currentState;
   const newValueFn = (value: MithrilHooks.ValueOrFn<T>, index: number) =>
     typeof value === 'function'
       ? (value as MithrilHooks.ValueFn<T>)(state.states[index] as T, index)
       : value;
-  return updateState<T>(initialValue, newValueFn);
+  return updateState<T>(initialState, newValueFn);
 };
 
 export const useEffect = effect(true);
@@ -106,13 +107,13 @@ export const useLayoutEffect = effect();
 
 export const useReducer = <T, A = void>(
   reducer: MithrilHooks.Reducer<T, A>,
-  initialValue?: T,
+  initialState?: T,
   initFn?: (args?: T) => T,
 ): [T, (action: A) => void] => {
   const state = currentState;
   // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialValue).
   const initValue =
-    !state.setup && initFn ? initFn(initialValue) : initialValue;
+    !state.setup && initFn ? initFn(initialState) : initialState;
 
   const getValueDispatch = (): [T, (action: A) => void] => {
     const [value, setValue, index] = updateState(initValue);
@@ -137,7 +138,7 @@ export const useRef = <T>(initialValue: T) => {
 
 export const useMemo = <T>(
   fn: MithrilHooks.MemoFn<T>,
-  deps?: MithrilHooks.Deps,
+  deps?: DependencyList,
 ) => {
   const state = currentState;
   const shouldRecompute = updateDeps(deps);
@@ -150,10 +151,10 @@ export const useMemo = <T>(
   return memoized;
 };
 
-export const useCallback = <T>(
-  fn: MithrilHooks.MemoFn<T>,
-  deps?: MithrilHooks.Deps,
-) => useMemo(() => fn, deps);
+export const useCallback = <T extends (...args: any[]) => any>(
+  callback: MithrilHooks.MemoFn<T>,
+  deps?: DependencyList,
+) => useMemo(() => callback, deps);
 
 export const withHooks = <T>(
   renderFunction: (
