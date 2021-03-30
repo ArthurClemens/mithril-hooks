@@ -1,6 +1,6 @@
 {
   "name": "mithril-hooks",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Use hooks with Mithril",
   "main": "dist/mithril-hooks",
   "module": "dist/mithril-hooks.mjs",
