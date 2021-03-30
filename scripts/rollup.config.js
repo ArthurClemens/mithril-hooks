@@ -8,7 +8,7 @@ const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
 const isModule = !!parseInt(env.MODULE, 10);
 const format = isModule ? 'es' : 'umd';
-const target = isModule ? 'ESNext' : 'es5';
+const target = isModule ? 'ESNEXT' : 'es2015';
 const module = isModule ? 'ESNext' : 'ES2015';
 const file = isModule
   ? `${process.env.DEST || pkg.module}`

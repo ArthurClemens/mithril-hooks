@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint ./src",
     "dev": "npm-run-all --parallel dev:watch dev:serve",
-    "dev:serve": "../../node_modules/webpack-dev-server/bin/webpack-dev-server.js --config ../../scripts/webpack.config.dev.js --disableHostCheck true --port 3000 --host 0.0.0.0",
+    "dev:serve": "../../node_modules/.bin/webpack serve --config ../../scripts/webpack.config.dev.js --port 3000 --host 0.0.0.0",
     "dev:watch": "../../node_modules/webpack/bin/webpack.js --watch --config ../../scripts/webpack.config.dev.js",
     "webpack": "../../node_modules/webpack/bin/webpack.js --config ../../scripts/webpack.config.prod.js",
     "build": "npm run clean && npm run webpack",
@@ -24,13 +24,13 @@
     "mithril-hooks": "^0.6.2"
   },
   "devDependencies": {
-    "@types/mithril": "2.0.3",
+    "@types/mithril": "2.0.7",
     "http-server": "^0.12.3",
-    "mithril-node-render": "3.0.0",
+    "mithril-node-render": "3.0.1",
     "mithril-query": "^3.1.0",
-    "mocha": "^8.1.1",
+    "mocha": "^8.3.2",
     "npm-run-all": "4.1.5",
     "rimraf": "^3.0.2",
-    "start-server-and-test": "^1.11.3"
+    "start-server-and-test": "^1.12.1"
   }
 }

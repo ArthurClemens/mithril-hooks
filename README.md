@@ -657,7 +657,7 @@ Tested with Mithril 1.1.6 and Mithril 2.x.
 
 ## Size
 
-1.51 KB with all dependencies, minified and gzipped
+807 B with all dependencies, minified and gzipped
 
 
 ## Supported browsers

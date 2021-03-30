@@ -122,7 +122,7 @@ const withHooks = (renderFunction, initialAttrs) => {
             depsIndex: 0,
             updates: [],
             cleanups: new Map(),
-            teardowns: new Map(),
+            teardowns: new Map(), // Keep track of teardowns even when the update was run only once
         });
     };
     const update = (vnode) => {
