@@ -6,14 +6,14 @@
   "module": "dist/mithril-hooks.mjs",
   "type": "module",
   "scripts": {
-    "npm-check-updates": "../../node_modules/npm-check-updates/bin/ncu -u",
-    "clean": "rm -rf dist/*",
-    "build": "npm run clean && npm run build:module && npm run build:umd && npm run size",
+    "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
+    "build:clean": "rm -rf dist/*",
     "build:module": "TYPESCRIPT=1 ENTRY=src/index.ts MODULE=1 MODULE_NAME=mithrilHooks ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
     "build:umd": "TYPESCRIPT=1 ENTRY=src/index.ts MODULE=0 MODULE_NAME=mithrilHooks ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
-    "size": "size-limit",
+    "build:size": "size-limit",
     "size:why": "size-limit --why",
-    "prettier": "prettier --config ../../.prettierrc.json --write \"./{src,scripts}/**/*.{js,jsx,ts,tsx,ejs}\""
+    "prettier": "prettier --config ../../.prettierrc.json --write \"./{src,scripts}/**/*.{js,jsx,ts,tsx,ejs}\"",
+    "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
   },
   "size-limit": [
     {
@@ -37,5 +37,6 @@
   },
   "peerDependencies": {
     "mithril": "^2.0.4"
-  }
+  },
+  "dependencies": {}
 }
