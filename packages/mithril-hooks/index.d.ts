@@ -1,5 +1,10 @@
 import { Component, Vnode, Children } from 'mithril';
-import { DependencyList, EffectCallback } from 'react';
+
+declare const UNDEFINED_VOID_ONLY: unique symbol;
+type Destructor = () => void | { [UNDEFINED_VOID_ONLY]: never };
+type EffectCallback = () => (void | Destructor);
+
+type DependencyList = ReadonlyArray<unknown>;
 
 export const withHooks: <T>(
   renderFunction: (
@@ -24,8 +29,8 @@ export const useLayoutEffect: (
 
 export const useReducer: <T, A = void>(
   reducer: MithrilHooks.Reducer<T, A>,
-  initialValue?: T | U,
-  initFn?: (args: U) => T,
+  initialState?: T,
+  initFn?: (args?: T) => T,
 ) => [T, (action: A) => void];
 
 export const useRef: <T>(
@@ -58,7 +63,7 @@ export namespace MithrilHooks {
     states: unknown[];
     statesIndex: number;
     depsIndex: number;
-    depsStates: Deps[];
+    depsStates: DependencyList[];
     setup: boolean;
     teardowns: Map<string | number, TearDownFn>;
     updates: UpdateFn[];
