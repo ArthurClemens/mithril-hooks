@@ -1,6 +1,7 @@
 import m, { Vnode, VnodeDOM, Component, Children } from 'mithril';
 import { DependencyList, EffectCallback } from 'react';
 import { MithrilHooks } from '..';
+import { stringify } from 'flatted';
 
 let currentState: MithrilHooks.State;
 
@@ -83,7 +84,7 @@ const updateState = <T>(
       const previousValue = state.states[index];
       const newValue = newValueFn ? newValueFn(value as T, index) : value;
       state.states[index] = newValue;
-      if (JSON.stringify(newValue) !== JSON.stringify(previousValue)) {
+      if (stringify(newValue) !== stringify(previousValue)) {
         scheduleRender(); // Calling redraw multiple times: Mithril will drop extraneous redraw calls, so performance should not be an issue
       }
     },
@@ -212,7 +213,7 @@ export const withHooks = <T>(
     const prevState = currentState;
     currentState = vnode.state;
     try {
-      [...vnode.state.teardowns.values()].forEach(call);
+      vnode.state.teardowns.forEach(call);
     } finally {
       currentState = prevState;
     }

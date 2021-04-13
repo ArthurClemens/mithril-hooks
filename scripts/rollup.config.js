@@ -24,6 +24,7 @@ export default {
     name: env.MODULE_NAME,
     format,
     file,
+    sourcemap: !isModule,
   },
   plugins: [
     isTypeScript &&
@@ -31,7 +32,7 @@ export default {
         tsconfigOverride: override,
       }),
 
-    !isModule && terser(),
+    !isModule && terser({}),
     cleanup({
       comments: 'none',
     }),

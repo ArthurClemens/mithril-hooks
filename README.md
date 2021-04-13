@@ -28,7 +28,6 @@ Use hooks with Mithril.
   - [TypeError: Cannot read property 'depsIndex' of undefined](#typeerror-cannot-read-property-depsindex-of-undefined)
 - [Compatibility](#compatibility)
 - [Size](#size)
-- [Supported browsers](#supported-browsers)
 - [History](#history)
 - [License](#license)
 
@@ -657,38 +656,8 @@ Tested with Mithril 1.1.6 and Mithril 2.x.
 
 ## Size
 
-807 B with all dependencies, minified and gzipped
+1.35 kB with all dependencies, minified and gzipped
 
-
-## Supported browsers
-
-Output from `npx browserslist`:
-
-```
-and_chr 81
-and_ff 68
-and_qq 10.4
-and_uc 12.12
-android 81
-baidu 7.12
-chrome 83
-chrome 81
-edge 83
-edge 18
-firefox 78
-firefox 77
-ie 11
-ios_saf 13.4-13.5
-ios_saf 13.3
-ios_saf 12.2-12.4
-kaios 2.5
-op_mini all
-op_mob 46
-opera 69
-safari 13.1
-samsung 12.0
-samsung 11.1-11.2
-```
 
 ## History
 

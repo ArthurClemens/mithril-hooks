@@ -38,5 +38,7 @@
   "peerDependencies": {
     "mithril": "^2.0.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "flatted": "^3.1.1"
+  }
 }

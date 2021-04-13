@@ -1,4 +1,5 @@
 import m from 'mithril';
+import { stringify } from 'flatted';
 
 let currentState;
 const call = Function.prototype.call.bind(Function.prototype.call);
@@ -63,7 +64,7 @@ const updateState = (initialState, newValueFn) => {
             const previousValue = state.states[index];
             const newValue = newValueFn ? newValueFn(value, index) : value;
             state.states[index] = newValue;
-            if (JSON.stringify(newValue) !== JSON.stringify(previousValue)) {
+            if (stringify(newValue) !== stringify(previousValue)) {
                 scheduleRender(); // Calling redraw multiple times: Mithril will drop extraneous redraw calls, so performance should not be an issue
             }
         },
@@ -163,7 +164,7 @@ const withHooks = (renderFunction, initialAttrs) => {
         const prevState = currentState;
         currentState = vnode.state;
         try {
-            [...vnode.state.teardowns.values()].forEach(call);
+            vnode.state.teardowns.forEach(call);
         }
         finally {
             currentState = prevState;
