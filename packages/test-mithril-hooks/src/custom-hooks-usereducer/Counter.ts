@@ -40,7 +40,7 @@ const CounterFn = (attrs: TCounterAttrs) => {
   const count = countState.count;
 
   const [inited, setInited] = useState(false);
-  const dom = useRef<HTMLDivElement>();
+  const dom = useRef<HTMLElement>();
   const domCountElement = useRef<HTMLDivElement>();
 
   const remove = () => {

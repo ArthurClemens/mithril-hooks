@@ -656,7 +656,7 @@ Tested with Mithril 1.1.6 and Mithril 2.x.
 
 ## Size
 
-1.35 kB with all dependencies, minified and gzipped
+1.36 kB with all dependencies, minified and gzipped
 
 
 ## History
