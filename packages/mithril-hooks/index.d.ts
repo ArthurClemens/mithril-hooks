@@ -9,7 +9,7 @@ type DependencyList = ReadonlyArray<unknown>;
 export const withHooks: <T>(
   renderFunction: (
     attrs: T & { vnode: Vnode<T, MithrilHooks.State>; children: Children },
-  ) => Vnode<T, MithrilHooks.State> | Children,
+  ) => Component<T>,
   initialAttrs?: T,
 ) => Component<T, MithrilHooks.State>;
 
