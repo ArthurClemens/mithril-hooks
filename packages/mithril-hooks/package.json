@@ -7,12 +7,14 @@
   "type": "module",
   "scripts": {
     "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
-    "build:clean": "rm -rf dist/*",
+    "build:clean": "rimraf dist/*",
+    "build:types": "../../node_modules/typescript/bin/tsc --p tsconfig.gen.json",
     "build:module": "TYPESCRIPT=1 ENTRY=src/index.ts MODULE=1 MODULE_NAME=mithrilHooks ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
     "build:umd": "TYPESCRIPT=1 ENTRY=src/index.ts MODULE=0 MODULE_NAME=mithrilHooks ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
+    "build:prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./dist/index.d.ts\"",
     "build:size": "size-limit",
     "size:why": "size-limit --why",
-    "prettier": "prettier --config ../../.prettierrc.json --write \"./{src,scripts}/**/*.{js,jsx,ts,tsx,ejs}\"",
+    "prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./{src,scripts}/**/*.{js,jsx,ts,tsx,ejs}\"",
     "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
   },
   "size-limit": [
@@ -22,16 +24,15 @@
   ],
   "files": [
     "dist",
-    "index.d.ts",
     "README.md"
   ],
+  "types": "dist",
   "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
   "homepage": "https://github.com/ArthurClemens/mithril-hooks",
   "license": "MIT",
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.10.2",
     "@types/mithril": "2.0.7",
-    "@types/react": "^17.0.3",
     "rimraf": "^3.0.2",
     "size-limit": "^4.10.2"
   },

@@ -22,7 +22,6 @@ module.exports = {
     // Make sure that libs are included only once
     alias: {
       mithril$: path.resolve(baseDir, 'node_modules/mithril/mithril.js'), // Note the exact match
-      react: path.resolve(baseDir, 'node_modules/react'),
     },
     extensions: ['.mjs', '.js', '.ts'],
   },

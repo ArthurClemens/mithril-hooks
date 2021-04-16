@@ -8,7 +8,8 @@ const scheduleRender = () =>
 m.redraw();
 const updateDeps = (deps) => {
     const state = currentState;
-    const depsIndex = state.depsIndex++;
+    const depsIndex = state.depsIndex;
+    state.depsIndex += 1;
     const prevDeps = state.depsStates[depsIndex] || [];
     const shouldRecompute = deps === undefined
         ? true // Always compute
@@ -54,7 +55,8 @@ const effect = (isAsync = false) => (fn, deps) => {
 };
 const updateState = (initialState, newValueFn) => {
     const state = currentState;
-    const index = state.statesIndex++;
+    const index = state.statesIndex;
+    state.statesIndex += 1;
     if (!state.setup) {
         state.states[index] = initialState;
     }
@@ -80,10 +82,12 @@ const useState = (initialState) => {
 };
 const useEffect = effect(true);
 const useLayoutEffect = effect();
-const useReducer = (reducer, initialState, initFn) => {
+function useReducer(reducer, initialState, initFn) {
     const state = currentState;
     // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialValue).
-    const initValue = !state.setup && initFn ? initFn(initialState) : initialState;
+    const initValue = !state.setup && initFn
+        ? initFn(initialState)
+        : initialState;
     const getValueDispatch = () => {
         const [value, setValue, index] = updateState(initValue);
         const dispatch = (action) => {
@@ -95,10 +99,12 @@ const useReducer = (reducer, initialState, initFn) => {
         return [value, dispatch];
     };
     return getValueDispatch();
-};
+}
 const useRef = (initialValue) => {
     // A ref is a persisted object that will not be updated, so it has no setter
-    const [value] = updateState({ current: initialValue });
+    const [value] = updateState({
+        current: initialValue,
+    });
     return value;
 };
 const useMemo = (fn, deps) => {

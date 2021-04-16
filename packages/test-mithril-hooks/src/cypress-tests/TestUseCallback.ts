@@ -1,7 +1,7 @@
 import m from 'mithril';
 import { withHooks, useCallback, useState } from 'mithril-hooks';
 
-const someCallback = (): number => {
+const someCallback = () => {
   return Math.random();
 };
 
