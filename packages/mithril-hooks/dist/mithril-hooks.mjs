@@ -1,5 +1,5 @@
-import m from 'mithril';
 import { stringify } from 'flatted';
+import m from 'mithril';
 
 let currentState;
 const call = Function.prototype.call.bind(Function.prototype.call);
@@ -8,7 +8,7 @@ const scheduleRender = () =>
 m.redraw();
 const updateDeps = (deps) => {
     const state = currentState;
-    const depsIndex = state.depsIndex;
+    const { depsIndex } = state;
     state.depsIndex += 1;
     const prevDeps = state.depsStates[depsIndex] || [];
     const shouldRecompute = deps === undefined
@@ -27,7 +27,7 @@ const effect = (isAsync = false) => (fn, deps) => {
     const state = currentState;
     const shouldRecompute = updateDeps(deps);
     if (shouldRecompute) {
-        const depsIndex = state.depsIndex;
+        const { depsIndex } = state;
         const runCallbackFn = () => {
             const teardown = fn();
             // A callback may return a function. If any, add it to the teardowns:
@@ -148,6 +148,7 @@ const withHooks = (renderFunction, initialAttrs) => {
             currentState = prevState;
         }
     };
+    // eslint-disable-next-line consistent-return
     const render = (vnode) => {
         const prevState = currentState;
         currentState = vnode.state;

@@ -1,5 +1,6 @@
-import m, { Vnode, VnodeDOM, Children, Component } from 'mithril';
 import { stringify } from 'flatted';
+import m, { Children, Component, Vnode, VnodeDOM } from 'mithril';
+
 import type { MithrilHooks, ReactTypes } from './types';
 
 let currentState: MithrilHooks.State;
@@ -12,7 +13,7 @@ const scheduleRender = () =>
 
 const updateDeps = (deps?: ReactTypes.DependencyList) => {
   const state = currentState;
-  const depsIndex = state.depsIndex;
+  const { depsIndex } = state;
   state.depsIndex += 1;
   const prevDeps = state.depsStates[depsIndex] || [];
   const shouldRecompute =
@@ -36,7 +37,7 @@ const effect = (isAsync = false) => (
   const state = currentState;
   const shouldRecompute = updateDeps(deps);
   if (shouldRecompute) {
-    const depsIndex = state.depsIndex;
+    const { depsIndex } = state;
     const runCallbackFn = () => {
       const teardown = fn();
       // A callback may return a function. If any, add it to the teardowns:
@@ -112,6 +113,7 @@ export function useReducer<T, A = unknown, U = unknown>(
   initialState: U,
   initFn: (args?: U) => T,
 ): [T, (action: A) => unknown];
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useReducer<T, A = unknown, U = unknown>(
   reducer: MithrilHooks.Reducer<T, A>,
   initialState?: T,
@@ -168,7 +170,7 @@ export const useMemo = <T = unknown>(
   return memoized;
 };
 
-export const useCallback = <T extends (...args: any[]) => any>(
+export const useCallback = <T extends (...args: unknown[]) => unknown>(
   callback: T,
   deps?: ReactTypes.DependencyList,
 ) => useMemo(() => callback, deps);
@@ -208,6 +210,7 @@ export const withHooks = <T = unknown>(
     }
   };
 
+  // eslint-disable-next-line consistent-return
   const render = (vnode: Vnode<T, MithrilHooks.State>) => {
     const prevState = currentState;
     currentState = vnode.state;

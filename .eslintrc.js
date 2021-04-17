@@ -28,10 +28,13 @@ module.exports = {
     },
   },
   rules: {
+    'no-void': OFF,
     // note you must disable the base rule as it can report incorrect errors
     'no-use-before-define': OFF,
-    'no-void': OFF,
     '@typescript-eslint/no-use-before-define': ERROR,
+    // note you must disable the base rule as it can report incorrect errors
+    'no-redeclare': OFF,
+    '@typescript-eslint/no-redeclare': ERROR,
 
     'prettier/prettier': ERROR,
     // ESLint rules
