@@ -3,8 +3,7 @@
   "version": "0.7.0",
   "description": "Use hooks with Mithril",
   "main": "dist/mithril-hooks",
-  "module": "dist/mithril-hooks.mjs",
-  "type": "module",
+  "module": "dist/mithril-hooks.module.js",
   "scripts": {
     "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
     "build:clean": "rimraf dist/*",
@@ -14,6 +13,7 @@
     "build:prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./dist/index.d.ts\"",
     "build:size": "size-limit",
     "size:why": "size-limit --why",
+    "lint": "eslint --fix --ext .ts ./src",
     "prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./{src,scripts}/**/*.{js,jsx,ts,tsx,ejs}\"",
     "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
   },
@@ -30,16 +30,15 @@
   "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
   "homepage": "https://github.com/ArthurClemens/mithril-hooks",
   "license": "MIT",
-  "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.10.2",
-    "@types/mithril": "2.0.7",
-    "rimraf": "^3.0.2",
-    "size-limit": "^4.10.2"
+  "dependencies": {
+    "flatted": "^3.1.1"
   },
   "peerDependencies": {
     "mithril": "^2.0.4"
   },
-  "dependencies": {
-    "flatted": "^3.1.1"
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.10.2",
+    "@types/mithril": "2.0.7",
+    "size-limit": "^4.10.2"
   }
 }
