@@ -1,21 +1,21 @@
 import m from 'mithril';
-import { CounterController } from './custom-hooks-usereducer';
-import { Toggle, ToggleWithPreset } from './Toggle';
 
+import { CounterController } from './custom-hooks-usereducer';
+import TestChildren from './cypress-tests/TestChildren';
 import TestCustomHooks from './cypress-tests/TestCustomHooks';
-import TestUseState from './cypress-tests/TestUseState';
-import TestUseRef from './cypress-tests/TestUseRef';
+import TestEffectRenderCounts from './cypress-tests/TestEffectRenderCounts';
+import TestEffectTiming from './cypress-tests/TestEffectTiming';
+import TestInitialAttributes from './cypress-tests/TestInitialAttributes';
+import TestUpdateRules from './cypress-tests/TestUpdateRules';
 import TestUseCallback from './cypress-tests/TestUseCallback';
 import TestUseEffect from './cypress-tests/TestUseEffect';
 import TestUseLayoutEffect from './cypress-tests/TestUseLayoutEffect';
 import TestUseMemo from './cypress-tests/TestUseMemo';
 import TestUseReducer from './cypress-tests/TestUseReducer';
-import TestUpdateRules from './cypress-tests/TestUpdateRules';
-import TestEffectTiming from './cypress-tests/TestEffectTiming';
-import TestEffectRenderCounts from './cypress-tests/TestEffectRenderCounts';
-import TestInitialAttributes from './cypress-tests/TestInitialAttributes';
-import TestChildren from './cypress-tests/TestChildren';
+import TestUseRef from './cypress-tests/TestUseRef';
+import TestUseState from './cypress-tests/TestUseState';
 import TestVnode from './cypress-tests/TestVnode';
+import { Toggle, ToggleWithPreset } from './Toggle';
 
 type TNavData = [string, string, m.Component];
 
@@ -96,8 +96,8 @@ type TRoutes = {
   [key: string]: m.RouteResolver<TLayoutAttrs>;
 };
 
-const routes: TRoutes = allLinks.reduce((acc, link) => {
-  const [, href, Component] = link;
+const routes: TRoutes = allLinks.reduce((acc, link1) => {
+  const [, href, Component] = link1;
   acc[href] = {
     render: () => m(Layout, { href }, m(Component)),
   };

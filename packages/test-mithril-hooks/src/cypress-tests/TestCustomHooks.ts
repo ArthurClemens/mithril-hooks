@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { withHooks, useState } from 'mithril-hooks';
+import { useState, withHooks } from 'mithril-hooks';
 
 const useCount = (initialValue = 0): [number, () => void, () => void] => {
   const [count, setCount] = useState(initialValue);

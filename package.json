@@ -7,7 +7,10 @@
   "license": "MIT",
   "scripts": {
     "deps": "npm run npm-check-updates && npm install && npm audit fix && lerna run npm-check-updates --stream && lerna clean -y && lerna bootstrap",
-    "npm-check-updates": "./node_modules/npm-check-updates/bin/cli.js -u"
+    "npm-check-updates": "./node_modules/npm-check-updates/bin/cli.js -u",
+    "lint": "lerna run lint",
+    "build": "lerna run build --stream",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",

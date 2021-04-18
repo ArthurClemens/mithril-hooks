@@ -3,7 +3,6 @@
   "version": "0.7.0",
   "private": true,
   "scripts": {
-    "lint": "eslint ./src",
     "dev": "npm-run-all --parallel dev:watch dev:serve",
     "dev:serve": "../../node_modules/.bin/webpack serve --config ../../scripts/webpack.config.dev.js --port 3000 --host 0.0.0.0",
     "dev:watch": "../../node_modules/webpack/bin/webpack.js --watch --config ../../scripts/webpack.config.dev.js",
@@ -13,6 +12,7 @@
     "rollup": "./node_modules/rollup/bin/rollup -c ./scripts/rollup.umd.js && ./node_modules/rollup/bin/rollup -c ./scripts/rollup.es.js",
     "clean": "rimraf dist/js/*",
     "test": "npm run test:cypress",
+    "lint": "eslint --fix --ext .ts ./src",
     "test:cypress": "npm run build && start-server-and-test serve 8080 cypress:run",
     "test:cypress:i": "npm run build && npm-run-all --parallel serve cypress:open",
     "cypress:run": "../../node_modules/cypress/bin/cypress run",

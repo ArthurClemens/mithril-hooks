@@ -1,5 +1,6 @@
 import m from 'mithril';
 import { withHooks } from 'mithril-hooks';
+
 import { Counter } from './Counter';
 import { useCounter } from './useCounter';
 

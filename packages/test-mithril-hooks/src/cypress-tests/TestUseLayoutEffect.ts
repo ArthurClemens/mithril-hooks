@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { withHooks, useState, useLayoutEffect, useRef } from 'mithril-hooks';
+import { useLayoutEffect, useRef, useState, withHooks } from 'mithril-hooks';
 
 const DomElementSize = () => {
   const [elementSize, setElementSize] = useState(100);
@@ -8,8 +8,9 @@ const DomElementSize = () => {
   const domElementRef = useRef<HTMLDivElement>();
 
   useLayoutEffect(() => {
-    domElementRef.current &&
+    if (domElementRef.current) {
       setMeasuredHeight(domElementRef.current.offsetHeight);
+    }
   }, [elementSize, inited]);
   return m('[data-test-id=DomElementSize]', [
     m('h2', 'DomElementSize'),
@@ -33,9 +34,10 @@ const DomElementSize = () => {
     ),
     m('button[data-test-id=render]', { onclick: () => {} }, 'Trigger render'),
     m('div', {
-      oncreate: vnode => (
-        (domElementRef.current = vnode.dom as HTMLDivElement), setInited(true)
-      ),
+      oncreate: vnode => {
+        domElementRef.current = vnode.dom as HTMLDivElement;
+        setInited(true);
+      },
       style: {
         width: `${elementSize}px`,
         height: `${elementSize}px`,

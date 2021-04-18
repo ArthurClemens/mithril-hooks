@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { withHooks, useState, useEffect } from 'mithril-hooks';
+import { useEffect, useState, withHooks } from 'mithril-hooks';
 
 type TAttrs = {
   initialCount: number;

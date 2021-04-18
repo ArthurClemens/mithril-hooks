@@ -1,5 +1,5 @@
-import m from "mithril";
-import { withHooks, useState, useEffect } from "mithril-hooks";
+import m from 'mithril';
+import { useEffect, useState, withHooks } from 'mithril-hooks';
 
 const renderCounts = {
   useEffectEmptyDeps: 0,
@@ -7,57 +7,43 @@ const renderCounts = {
 };
 
 const EffectCountEmpty = () => {
-  renderCounts.useEffectEmptyDeps++;
+  renderCounts.useEffectEmptyDeps += 1;
 
-  useEffect(
-    () => {
-      //
-    },
-    []
-  );
+  useEffect(() => {
+    //
+  }, []);
 
-  return m("[data-test-id=EffectCountEmpty]", [
-    m("h2", "EffectCountEmpty"),
-    m("p[data-test-id=renderCounts]", renderCounts.useEffectEmptyDeps),
-    m("button[data-test-id=button]", 
-      { onclick: () => {} },
-      "Trigger render"
-    ),
+  return m('[data-test-id=EffectCountEmpty]', [
+    m('h2', 'EffectCountEmpty'),
+    m('p[data-test-id=renderCounts]', renderCounts.useEffectEmptyDeps),
+    m('button[data-test-id=button]', { onclick: () => {} }, 'Trigger render'),
   ]);
 };
 
 const EffectCountVariable = () => {
-  renderCounts.useEffectVariable++;
+  renderCounts.useEffectVariable += 1;
   const [count, setCount] = useState(0);
 
-  useEffect(
-    () => {
-      //
-    },
-    [count]
-  );
+  useEffect(() => {
+    //
+  }, [count]);
 
-  return m("[data-test-id=EffectCountVariable]", [
-    m("h2", "EffectCountVariable"),
-    m("p[data-test-id=counts]", count),
-    m("p[data-test-id=renderCounts]", renderCounts.useEffectVariable),
-    m("button[data-test-id=button-increment]", 
+  return m('[data-test-id=EffectCountVariable]', [
+    m('h2', 'EffectCountVariable'),
+    m('p[data-test-id=counts]', count),
+    m('p[data-test-id=renderCounts]', renderCounts.useEffectVariable),
+    m(
+      'button[data-test-id=button-increment]',
       { onclick: () => setCount(count + 1) },
-      "More"
+      'More',
     ),
-    m("button[data-test-id=button]", 
-      { onclick: () => {} },
-      "Trigger render"
-    ),
+    m('button[data-test-id=button]', { onclick: () => {} }, 'Trigger render'),
   ]);
 };
 
 const HookedEffectCountEmpty = withHooks(EffectCountEmpty);
 const HookedEffectCountVariable = withHooks(EffectCountVariable);
 
-export default ({
-  view: () => [
-    m(HookedEffectCountEmpty),
-    m(HookedEffectCountVariable),
-  ]
-});
+export default {
+  view: () => [m(HookedEffectCountEmpty), m(HookedEffectCountVariable)],
+};

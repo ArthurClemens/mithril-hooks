@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { withHooks, useEffect, useLayoutEffect } from 'mithril-hooks';
+import { useEffect, useLayoutEffect, withHooks } from 'mithril-hooks';
 
 const timings = {
   useEffect: 0,

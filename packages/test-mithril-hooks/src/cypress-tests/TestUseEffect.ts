@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { withHooks, useState, useEffect } from 'mithril-hooks';
+import { useEffect, useState, withHooks } from 'mithril-hooks';
 
 type TCleanupCalled = { [key: string]: boolean };
 let cleanupCalled: TCleanupCalled = {};
@@ -45,11 +45,7 @@ const SideEffect = () => {
   ]);
 };
 
-const Cleanup = ({
-  wrapperSetCleanupCalled,
-}: {
-  wrapperSetCleanupCalled: TWrapperSetCleanupCalled;
-}) => {
+const Cleanup = () => {
   const [val, setVal] = useState('initial text');
   const [x] = useState();
   const [y] = useState();
@@ -59,45 +55,53 @@ const Cleanup = ({
   const [cleanup4Called, setCleanup4Called] = useState(false);
   const [cleanup5Called, setCleanup5Called] = useState(false);
 
-  useEffect(() => {
-    // ...
-    return () => {
-      setCleanup1Called(true);
-      wrapperSetCleanupCalled(1);
-    };
-  }, [val, x]);
+  useEffect(
+    () =>
+      // ...
+      () => {
+        setCleanup1Called(true);
+        wrapperSetCleanupCalled(1);
+      },
+    [val, x],
+  );
 
-  useEffect(() => {
-    // ...
-    return () => {
-      setCleanup2Called(true);
-      wrapperSetCleanupCalled(2);
-    };
-  }, [y, val]);
+  useEffect(
+    () =>
+      // ...
+      () => {
+        setCleanup2Called(true);
+        wrapperSetCleanupCalled(2);
+      },
+    [y, val],
+  );
 
-  useEffect(() => {
-    // ...
-    return () => {
-      setCleanup3Called(true);
-      wrapperSetCleanupCalled(3);
-    };
-  }, [val]);
+  useEffect(
+    () =>
+      // ...
+      () => {
+        setCleanup3Called(true);
+        wrapperSetCleanupCalled(3);
+      },
+    [val],
+  );
 
-  useEffect(() => {
-    // ...
-    return () => {
-      setCleanup4Called(true);
-      wrapperSetCleanupCalled(4);
-    };
-  }, []);
+  useEffect(
+    () =>
+      // ...
+      () => {
+        setCleanup4Called(true);
+        wrapperSetCleanupCalled(4);
+      },
+    [],
+  );
 
-  useEffect(() => {
+  useEffect(() =>
     // ...
-    return () => {
+    () => {
       setCleanup5Called(true);
       wrapperSetCleanupCalled(5);
-    };
-  });
+    },
+  );
 
   return m('[data-test-id=cleanup]', [
     m('input[data-test-id=source].input', {
@@ -122,11 +126,12 @@ const HookedCleanup = withHooks(Cleanup);
 const CleanupWrapper = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       cleanupCalled = {};
-    };
-  }, []);
+    },
+    [],
+  );
 
   return m('section.section[data-test-id=cleanup-wrapper]', [
     m('h2.title.is-2', 'Cleanup'),
@@ -142,7 +147,7 @@ const CleanupWrapper = () => {
       },
       'Toggle',
     ),
-    isVisible && m(HookedCleanup, { wrapperSetCleanupCalled }),
+    isVisible && m(HookedCleanup),
     Object.keys(cleanupCalled).length
       ? m.fragment({}, [
           m('p', 'Cleanups called:'),

@@ -1,10 +1,10 @@
 import m from 'mithril';
 import {
-  withHooks,
   useEffect,
-  useState,
-  useRef,
   useReducer,
+  useRef,
+  useState,
+  withHooks,
 } from 'mithril-hooks';
 
 type TState = {
@@ -37,7 +37,7 @@ const CounterFn = (attrs: TCounterAttrs) => {
   const [countState, dispatch] = useReducer<TState, TAction>(counterReducer, {
     count: initialCount,
   });
-  const count = countState.count;
+  const { count } = countState;
 
   const [inited, setInited] = useState(false);
   const dom = useRef<HTMLElement>();
@@ -65,14 +65,17 @@ const CounterFn = (attrs: TCounterAttrs) => {
     '.counter',
     {
       className: inited ? 'active' : '',
-      oncreate: vnode => (dom.current = vnode.dom as HTMLDivElement),
+      oncreate: vnode => {
+        dom.current = vnode.dom as HTMLDivElement;
+      },
     },
     m('.counter-inner', [
       m(
         '.count',
         {
-          oncreate: vnode =>
-            (domCountElement.current = vnode.dom as HTMLDivElement),
+          oncreate: vnode => {
+            domCountElement.current = vnode.dom as HTMLDivElement;
+          },
         },
         count,
       ),

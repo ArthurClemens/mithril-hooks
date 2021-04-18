@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { withHooks, useRef } from 'mithril-hooks';
+import { useRef, withHooks } from 'mithril-hooks';
 
 const DomElementRef = () => {
   const domElementRef = useRef<HTMLDivElement>();
@@ -9,8 +9,9 @@ const DomElementRef = () => {
     m(
       'div',
       {
-        oncreate: vnode =>
-          (domElementRef.current = vnode.dom as HTMLDivElement),
+        oncreate: vnode => {
+          domElementRef.current = vnode.dom as HTMLDivElement;
+        },
       },
       'QWERTY',
     ),

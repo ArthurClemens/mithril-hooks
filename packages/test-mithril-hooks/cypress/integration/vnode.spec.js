@@ -1,13 +1,11 @@
 /* global cy, describe, before, it */
 
-describe("Children", () => {
-  
+describe('Children', () => {
   before(() => {
-    cy.visit("/TestChildren");
+    cy.visit('/TestChildren');
   });
-  
-  it("should render children", () => {
-    cy.get("[data-test-id=Children]").should("contain", "This is a child");
+
+  it('should render children', () => {
+    cy.get('[data-test-id=Children]').should('contain', 'This is a child');
   });
-  
 });

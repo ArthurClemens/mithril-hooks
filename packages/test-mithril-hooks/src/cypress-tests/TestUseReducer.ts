@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { withHooks, useReducer } from 'mithril-hooks';
+import { useReducer, withHooks } from 'mithril-hooks';
 
 type TState = {
   count: number;
@@ -33,7 +33,7 @@ const ReducerInitFunction = (attrs: TReducerInitFunctionAttrs) => {
     initialCount,
     initState,
   );
-  const count = countState.count;
+  const { count } = countState;
 
   return m('[data-test-id=ReducerInitFunction]', [
     m('h2', 'ReducerInitFunction'),
@@ -53,7 +53,7 @@ const ReducerCounter = (attrs: TReducerCounnterAttrs) => {
   const [countState, dispatch] = useReducer(counterReducer, {
     count: initialCount,
   });
-  const count = countState.count;
+  const { count } = countState;
 
   return m('[data-test-id=ReducerCounter]', [
     m('h2', 'ReducerCounter'),
