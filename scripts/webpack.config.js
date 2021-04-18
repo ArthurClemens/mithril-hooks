@@ -1,10 +1,9 @@
-/* global process */
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackModules = require('webpack-modules');
 
 const baseDir = process.cwd();
-const env = process.env; // eslint-disable-line no-undef
+const { env } = process; // eslint-disable-line no-undef
 
 module.exports = {
   context: path.resolve(baseDir, './src'),
