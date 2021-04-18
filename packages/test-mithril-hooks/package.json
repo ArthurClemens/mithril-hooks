@@ -1,6 +1,6 @@
 {
   "name": "test-mithril-hooks",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "private": true,
   "scripts": {
     "dev": "npm-run-all --parallel dev:watch dev:serve",
@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "mithril": "2.0.4",
-    "mithril-hooks": "^0.7.0"
+    "mithril-hooks": "^0.7.1"
   },
   "devDependencies": {
     "@types/mithril": "2.0.7",
