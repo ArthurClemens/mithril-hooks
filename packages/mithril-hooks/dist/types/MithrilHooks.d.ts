@@ -1,13 +1,13 @@
 import type { DependencyList } from './ReactTypes';
-export declare type TearDownFn = () => void;
-export declare type UpdateFn = () => void;
-export declare type MemoFn<T> = () => T;
-export declare type ValueFn<T> = (currentValue: T, index: number) => T;
-export declare type ValueOrFn<T> = T | ValueFn<T>;
-export declare type NewValueFn<T> = (value: ValueOrFn<T>, index: number) => T;
-export declare type EffectReturnFn = () => unknown;
-export declare type Reducer<T, A> = (state: T, action: A) => T;
-export declare type State = {
+export type TearDownFn = () => void;
+export type UpdateFn = () => void;
+export type MemoFn<T> = () => T;
+export type ValueFn<T> = (currentValue: T, index: number) => T;
+export type ValueOrFn<T> = T | ValueFn<T>;
+export type NewValueFn<T> = (value: ValueOrFn<T>, index: number) => T;
+export type EffectReturnFn = () => unknown;
+export type Reducer<T, A> = (state: T, action: A) => T;
+export type State = {
     states: unknown[];
     statesIndex: number;
     depsIndex: number;
@@ -16,4 +16,3 @@ export declare type State = {
     teardowns: Map<string | number, TearDownFn>;
     updates: UpdateFn[];
 };
-export {};

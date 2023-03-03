@@ -6,7 +6,7 @@ type TState = {
 };
 
 type TAction = {
-  type: string;
+  type: 'increment' | 'decrement';
 };
 
 const counterReducer = (state: TState, action: TAction) => {

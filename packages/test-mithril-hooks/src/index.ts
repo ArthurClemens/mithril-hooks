@@ -1,5 +1,10 @@
 import m from 'mithril';
 
+import "./css/app.css";
+import "./css/custom-hooks-usereducer.css";
+import "./css/useeffect.css";
+import "./css/toggle.css";
+
 import { CounterController } from './custom-hooks-usereducer';
 import TestChildren from './cypress-tests/TestChildren';
 import TestCustomHooks from './cypress-tests/TestCustomHooks';
@@ -16,8 +21,9 @@ import TestUseRef from './cypress-tests/TestUseRef';
 import TestUseState from './cypress-tests/TestUseState';
 import TestVnode from './cypress-tests/TestVnode';
 import { Toggle, ToggleWithPreset } from './Toggle';
+import { State } from 'mithril-hooks/dist/types/MithrilHooks';
 
-type TNavData = [string, string, m.Component];
+type TNavData = [string, string, m.Component<any, State>];
 
 const links: TNavData[] = [
   ['Simple toggle', '/toggle', Toggle],

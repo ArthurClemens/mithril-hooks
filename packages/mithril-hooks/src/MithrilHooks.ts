@@ -73,7 +73,7 @@ const effect = (isAsync = false) => (
 const updateState = <T>(
   initialState?: T,
   newValueFn?: MithrilHooks.NewValueFn<T>,
-): [T, (value: MithrilHooks.ValueOrFn<T>) => unknown, number] => {
+): [T, (value: MithrilHooks.ValueOrFn<T>) => any, number] => {
   const state = currentState;
   const index = state.statesIndex;
   state.statesIndex += 1;
@@ -108,23 +108,23 @@ export const useState = <T = unknown>(
 export const useEffect = effect(true);
 export const useLayoutEffect = effect();
 
-export function useReducer<T, A = unknown, U = unknown>(
+export function useReducer<T, A = any, U = any>(
   reducer: MithrilHooks.Reducer<T, A>,
   initialState: U,
   initFn: (args?: U) => T,
-): [T, (action: A) => unknown];
+): [T, (action: A) => T];
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function useReducer<T, A = unknown, U = unknown>(
+export function useReducer<T, A = any, U = any>(
   reducer: MithrilHooks.Reducer<T, A>,
   initialState?: T,
   initFn?: never,
-): [T, (action: A) => unknown];
+): [T, (action: A) => T];
 
-export function useReducer<T, A = unknown, U = unknown>(
+export function useReducer<T, A = any, U = any>(
   reducer: MithrilHooks.Reducer<T, A>,
   initialState?: unknown,
-  initFn?: ((args?: unknown) => unknown) | never,
-): [T, (action: A) => unknown] {
+  initFn?: ((args?: unknown) => any) | never,
+): [T, (action: A) => T] {
   const state = currentState;
   // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialValue).
   const initValue: T =
@@ -132,7 +132,7 @@ export function useReducer<T, A = unknown, U = unknown>(
       ? (initFn(initialState as U) as T)
       : (initialState as T);
 
-  const getValueDispatch = (): [T, (action: A) => unknown] => {
+  const getValueDispatch = (): [T, (action: A) => T] => {
     const [value, setValue, index] = updateState(initValue);
     const dispatch = (action: A) => {
       const previousValue = state.states[index] as T;
@@ -226,6 +226,7 @@ export const withHooks = <T = unknown>(
     } finally {
       currentState = prevState;
     }
+    return undefined;
   };
 
   const teardown = (vnode: VnodeDOM<T, MithrilHooks.State>) => {

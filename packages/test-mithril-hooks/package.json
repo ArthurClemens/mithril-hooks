@@ -3,35 +3,22 @@
   "version": "0.7.1",
   "private": true,
   "scripts": {
-    "dev": "npm-run-all --parallel dev:watch dev:serve",
-    "dev:serve": "../../node_modules/.bin/webpack serve --config ../../scripts/webpack.config.dev.js --port 3000 --host 0.0.0.0",
-    "dev:watch": "../../node_modules/webpack/bin/webpack.js --watch --config ../../scripts/webpack.config.dev.js",
-    "webpack": "../../node_modules/webpack/bin/webpack.js --config ../../scripts/webpack.config.prod.js",
-    "build": "npm run clean && npm run webpack",
-    "serve": "http-server -c-1 -p 8080 dist",
-    "rollup": "./node_modules/rollup/bin/rollup -c ./scripts/rollup.umd.js && ./node_modules/rollup/bin/rollup -c ./scripts/rollup.es.js",
-    "clean": "rimraf dist/js/*",
-    "test": "npm run test:cypress",
-    "lint": "eslint --fix --ext .ts ./src",
-    "test:cypress": "npm run build && start-server-and-test serve 8080 cypress:run",
-    "test:cypress:i": "npm run build && npm-run-all --parallel serve cypress:open",
-    "cypress:run": "../../node_modules/cypress/bin/cypress run",
-    "cypress:open": "../../node_modules/cypress/bin/cypress open",
-    "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
+    "deps": "npm-check-updates -u",
+    "dev": "vite --port 3000",
+    "build": "tsc && vite build",
+    "preview": "vite preview --port 3000",
+    "test": "npm run build && start-server-and-test --expect 200 preview http://localhost:3000 cypress:run",
+    "test:i": "npm-run-all --parallel dev cypress:open",
+    "cypress:run": "cypress run --e2e",
+    "cypress:open": "cypress open --e2e"
   },
   "license": "MIT",
   "dependencies": {
-    "mithril": "2.0.4",
+    "mithril": "2.2.2",
     "mithril-hooks": "^0.7.1"
   },
   "devDependencies": {
-    "@types/mithril": "2.0.7",
-    "http-server": "^0.12.3",
-    "mithril-node-render": "3.0.1",
-    "mithril-query": "^3.1.0",
-    "mocha": "^10.2.0",
-    "npm-run-all": "4.1.5",
-    "rimraf": "^3.0.2",
-    "start-server-and-test": "^1.12.1"
+    "@types/mithril": "2.0.12",
+    "start-server-and-test": "^2.0.0"
   }
 }
