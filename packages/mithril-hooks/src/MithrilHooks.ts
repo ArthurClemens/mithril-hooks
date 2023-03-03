@@ -30,45 +30,47 @@ const updateDeps = (deps?: ReactTypes.DependencyList) => {
   return shouldRecompute;
 };
 
-const effect = (isAsync = false) => (
-  fn: ReactTypes.EffectCallback,
-  deps?: ReactTypes.DependencyList,
-) => {
-  const state = currentState;
-  const shouldRecompute = updateDeps(deps);
-  if (shouldRecompute) {
-    const { depsIndex } = state;
-    const runCallbackFn = () => {
-      const teardown = fn();
-      // A callback may return a function. If any, add it to the teardowns:
-      if (typeof teardown === 'function') {
-        // Store this this function to be called at cleanup and unmount
-        state.teardowns.set(depsIndex, teardown as MithrilHooks.EffectReturnFn);
-        // At unmount, call re-render at least once
-        state.teardowns.set('_', scheduleRender);
-      }
-    };
+const effect =
+  (isAsync = false) =>
+  (fn: ReactTypes.EffectCallback, deps?: ReactTypes.DependencyList) => {
+    const state = currentState;
+    const shouldRecompute = updateDeps(deps);
+    if (shouldRecompute) {
+      const { depsIndex } = state;
+      const runCallbackFn = () => {
+        const teardown = fn();
+        // A callback may return a function. If any, add it to the teardowns:
+        if (typeof teardown === 'function') {
+          // Store this this function to be called at cleanup and unmount
+          state.teardowns.set(
+            depsIndex,
+            teardown as MithrilHooks.EffectReturnFn,
+          );
+          // At unmount, call re-render at least once
+          state.teardowns.set('_', scheduleRender);
+        }
+      };
 
-    // First clean up any previous cleanup function
-    const teardown = state.teardowns.get(depsIndex);
-    try {
-      if (typeof teardown === 'function') {
-        teardown();
+      // First clean up any previous cleanup function
+      const teardown = state.teardowns.get(depsIndex);
+      try {
+        if (typeof teardown === 'function') {
+          teardown();
+        }
+      } finally {
+        state.teardowns.delete(depsIndex);
       }
-    } finally {
-      state.teardowns.delete(depsIndex);
+
+      state.updates.push(
+        isAsync
+          ? () =>
+              new Promise(resolve => {
+                requestAnimationFrame(resolve);
+              }).then(runCallbackFn)
+          : runCallbackFn,
+      );
     }
-
-    state.updates.push(
-      isAsync
-        ? () =>
-            new Promise(resolve => requestAnimationFrame(resolve)).then(
-              runCallbackFn,
-            )
-        : runCallbackFn,
-    );
-  }
-};
+  };
 
 const updateState = <T>(
   initialState?: T,
@@ -113,17 +115,15 @@ export function useReducer<T, A = any, U = any>(
   initialState: U,
   initFn: (args?: U) => T,
 ): [T, (action: A) => T];
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useReducer<T, A = any, U = any>(
   reducer: MithrilHooks.Reducer<T, A>,
   initialState?: T,
   initFn?: never,
 ): [T, (action: A) => T];
-
 export function useReducer<T, A = any, U = any>(
   reducer: MithrilHooks.Reducer<T, A>,
   initialState?: unknown,
-  initFn?: ((args?: unknown) => any) | never,
+  initFn?: ((args?: unknown) => T) | never,
 ): [T, (action: A) => T] {
   const state = currentState;
   // From the React docs: You can also create the initial state lazily. To do this, you can pass an init function as the third argument. The initial state will be set to init(initialValue).
@@ -134,7 +134,7 @@ export function useReducer<T, A = any, U = any>(
 
   const getValueDispatch = (): [T, (action: A) => T] => {
     const [value, setValue, index] = updateState(initValue);
-    const dispatch = (action: A) => {
+    const dispatch = (action: A): T => {
       const previousValue = state.states[index] as T;
       return setValue(
         // Next state:
@@ -173,7 +173,9 @@ export const useMemo = <T = unknown>(
 export const useCallback = <T extends (...args: unknown[]) => unknown>(
   callback: T,
   deps?: ReactTypes.DependencyList,
-) => useMemo(() => callback, deps);
+) =>
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useMemo(() => callback, deps);
 
 export const withHooks = <T = unknown>(
   renderFunction: (

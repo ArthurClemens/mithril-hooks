@@ -1,4 +1,3 @@
-
 describe('useRef', () => {
   before(() => {
     cy.visit('/TestUseRef');

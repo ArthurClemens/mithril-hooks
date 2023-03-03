@@ -1,4 +1,3 @@
-
 describe('useCallback', () => {
   before(() => {
     cy.visit('/TestUseCallback');

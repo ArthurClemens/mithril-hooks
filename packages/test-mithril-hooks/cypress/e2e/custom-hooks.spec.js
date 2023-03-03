@@ -1,4 +1,3 @@
-
 describe('custom hooks', () => {
   beforeEach(() => {
     cy.visit('/TestCustomHooks');

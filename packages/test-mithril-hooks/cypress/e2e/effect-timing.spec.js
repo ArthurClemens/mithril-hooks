@@ -1,4 +1,3 @@
-
 describe('effect timing', () => {
   before(() => {
     cy.visit('/TestEffectTiming');

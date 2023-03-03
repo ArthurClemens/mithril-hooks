@@ -5,7 +5,7 @@ import { useMemo, useState, withHooks } from 'mithril-hooks';
 // so the duration of this process is fairly short.
 // If `expensiveCount` suddenly gets "undefined" it may have to do
 // with a Cypress optimisation.
-const computeExpensiveValue = (): number => {
+const computeExpensiveValue = (_expensiveCount: number): number => {
   const total = [];
   const max = 1000 + Math.floor(Math.random() * 40);
   for (let i = 0; i < max; i += 1) {
@@ -19,7 +19,7 @@ const MemoValue = () => {
   const [expensiveCount, setExpensiveCount] = useState(0);
 
   const memoizedValue = useMemo(
-    () => computeExpensiveValue(),
+    () => computeExpensiveValue(expensiveCount),
     [expensiveCount], // only calculate when expensiveCount is updated
   );
 

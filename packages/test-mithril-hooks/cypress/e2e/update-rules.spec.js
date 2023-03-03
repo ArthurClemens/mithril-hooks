@@ -1,4 +1,3 @@
-
 describe('update rules', () => {
   before(() => {
     cy.visit('/TestUpdateRules');

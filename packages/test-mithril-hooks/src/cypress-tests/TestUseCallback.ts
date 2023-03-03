@@ -1,7 +1,7 @@
 import m from 'mithril';
 import { useCallback, useState, withHooks } from 'mithril-hooks';
 
-const someCallback = () => Math.random();
+const someCallback = (_someValue: number) => Math.random();
 
 type TCallback = () => void;
 let previousCallback: TCallback;
@@ -9,7 +9,10 @@ let previousCallback: TCallback;
 const CallbackFn = () => {
   const [someValue, setSomeValue] = useState(0);
 
-  const memoizedCallback = useCallback(() => someCallback(), [someValue]);
+  const memoizedCallback = useCallback(
+    () => someCallback(someValue),
+    [someValue],
+  );
 
   return m('[data-test-id=Callback]', [
     m('h2', 'Callback'),
