@@ -4,4 +4,4 @@ npm-debug.log*
 *.log
 *.lock
 .rpt2_cache
-packages/test-mithril-hooks/build
+packages/test-mithril-hooks/dist
