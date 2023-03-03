@@ -1,4 +1,3 @@
-
 describe('Initial attributes', () => {
   before(() => {
     cy.visit('/TestInitialAttributes');

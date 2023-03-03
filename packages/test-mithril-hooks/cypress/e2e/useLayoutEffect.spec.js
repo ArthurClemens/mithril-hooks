@@ -1,4 +1,3 @@
-
 describe('useLayoutEffect', () => {
   before(() => {
     cy.visit('/TestUseLayoutEffect');

@@ -65,7 +65,10 @@ const effect = (isAsync = false) => (fn, deps) => {
     const runCallbackFn = () => {
       const teardown2 = fn();
       if (typeof teardown2 === "function") {
-        state.teardowns.set(depsIndex, teardown2);
+        state.teardowns.set(
+          depsIndex,
+          teardown2
+        );
         state.teardowns.set("_", scheduleRender);
       }
     };
@@ -78,9 +81,9 @@ const effect = (isAsync = false) => (fn, deps) => {
       state.teardowns.delete(depsIndex);
     }
     state.updates.push(
-      isAsync ? () => new Promise((resolve) => requestAnimationFrame(resolve)).then(
-        runCallbackFn
-      ) : runCallbackFn
+      isAsync ? () => new Promise((resolve) => {
+        requestAnimationFrame(resolve);
+      }).then(runCallbackFn) : runCallbackFn
     );
   }
 };
@@ -142,7 +145,10 @@ const useMemo = (fn, deps) => {
   }
   return memoized;
 };
-const useCallback = (callback, deps) => useMemo(() => callback, deps);
+const useCallback = (callback, deps) => (
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useMemo(() => callback, deps)
+);
 const withHooks = (renderFunction, initialAttrs) => {
   const init = (vnode) => {
     Object.assign(vnode.state, {
@@ -206,6 +212,14 @@ const withHooks = (renderFunction, initialAttrs) => {
     onremove: teardown
   };
 };
+const MithrilHooks = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null
+}, Symbol.toStringTag, { value: "Module" }));
+const ReactTypes = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null
+}, Symbol.toStringTag, { value: "Module" }));
+exports.MithrilHooks = MithrilHooks;
+exports.ReactTypes = ReactTypes;
 exports.useCallback = useCallback;
 exports.useEffect = useEffect;
 exports.useLayoutEffect = useLayoutEffect;

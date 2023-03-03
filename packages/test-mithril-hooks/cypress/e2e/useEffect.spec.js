@@ -1,4 +1,3 @@
-
 describe('useEffect', () => {
   before(() => {
     cy.visit('/TestUseEffect');

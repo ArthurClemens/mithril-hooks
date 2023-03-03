@@ -1,4 +1,3 @@
-
 describe('useReducer', () => {
   before(() => {
     cy.visit('/TestUseReducer');

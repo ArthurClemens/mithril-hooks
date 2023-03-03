@@ -1,4 +1,3 @@
-
 describe('effect render counts', () => {
   before(() => {
     cy.visit('/TestEffectRenderCounts');
