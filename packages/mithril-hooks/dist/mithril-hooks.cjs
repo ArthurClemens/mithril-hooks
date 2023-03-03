@@ -1,4 +1,6 @@
-import m from "mithril";
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const m = require("mithril");
 /*! (c) 2020 Andrea Giammarchi */
 const { parse: $parse, stringify: $stringify } = JSON;
 const Primitive = String;
@@ -204,14 +206,12 @@ const withHooks = (renderFunction, initialAttrs) => {
     onremove: teardown
   };
 };
-export {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-  withHooks
-};
-//# sourceMappingURL=mithril-hooks.module.js.map
+exports.useCallback = useCallback;
+exports.useEffect = useEffect;
+exports.useLayoutEffect = useLayoutEffect;
+exports.useMemo = useMemo;
+exports.useReducer = useReducer;
+exports.useRef = useRef;
+exports.useState = useState;
+exports.withHooks = withHooks;
+//# sourceMappingURL=mithril-hooks.cjs.map

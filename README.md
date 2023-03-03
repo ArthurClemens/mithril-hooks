@@ -27,8 +27,7 @@ Use hooks with Mithril.
 - [Troubleshooting](#troubleshooting)
   - [TypeError: Cannot read property 'depsIndex' of undefined](#typeerror-cannot-read-property-depsindex-of-undefined)
 - [Compatibility](#compatibility)
-- [Size](#size)
-- [Supported browsers](#supported-browsers)
+- [Sizes](#sizes)
 - [History](#history)
 - [License](#license)
 
@@ -655,42 +654,37 @@ resolve: {
 Tested with Mithril 1.1.6 and Mithril 2.x.
 
 
-## Size
-
-1.36 kB with all dependencies, minified and gzipped
-
-
-## Supported browsers
-
-Output from `npx browserslist`:
+## Sizes
 
 ```
-and_chr 89
-and_ff 86
-and_qq 10.4
-and_uc 12.12
-android 89
-baidu 7.12
-chrome 89
-chrome 88
-chrome 87
-edge 89
-edge 88
-firefox 86
-firefox 85
-ie 11
-ios_saf 14.0-14.5
-ios_saf 13.4-13.7
-kaios 2.5
-op_mini all
-op_mob 62
-opera 73
-opera 72
-safari 14
-safari 13.1
-samsung 13.0
-samsung 12.0
+┌───────────────────────────────────────────┐
+│                                           │
+│   Bundle Name:  mithril-hooks.module.js   │
+│   Bundle Size:  5.96 KB                   │
+│   Minified Size:  2.75 KB                 │
+│   Gzipped Size:  1.19 KB                  │
+│                                           │
+└───────────────────────────────────────────┘
+
+┌────────────────────────────────────────┐
+│                                        │
+│   Bundle Name:  mithril-hooks.umd.js   │
+│   Bundle Size:  6.95 KB                │
+│   Minified Size:  2.57 KB              │
+│   Gzipped Size:  1.24 KB               │
+│                                        │
+└────────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│                                     │
+│   Bundle Name:  mithril-hooks.cjs   │
+│   Bundle Size:  6.18 KB             │
+│   Minified Size:  2.96 KB           │
+│   Gzipped Size:  1.26 KB            │
+│                                     │
+└─────────────────────────────────────┘
 ```
+
 
 ## History
 

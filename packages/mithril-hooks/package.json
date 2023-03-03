@@ -2,43 +2,37 @@
   "name": "mithril-hooks",
   "version": "0.7.1",
   "description": "Use hooks with Mithril",
-  "main": "dist/mithril-hooks",
-  "module": "dist/mithril-hooks.module.js",
-  "scripts": {
-    "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
-    "build:clean": "rimraf dist/*",
-    "build:types": "../../node_modules/typescript/bin/tsc --p tsconfig.gen.json",
-    "build:module": "TYPESCRIPT=1 ENTRY=src/index.ts MODULE=1 MODULE_NAME=mithrilHooks ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
-    "build:umd": "TYPESCRIPT=1 ENTRY=src/index.ts MODULE=0 MODULE_NAME=mithrilHooks ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
-    "build:prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./dist/index.d.ts\"",
-    "build:size": "size-limit",
-    "size:why": "size-limit --why",
-    "lint": "eslint --fix --ext .ts ./src",
-    "prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./{src,scripts}/**/*.{js,jsx,ts,tsx,ejs}\"",
-    "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
-  },
-  "size-limit": [
-    {
-      "path": "dist/mithril-hooks.js"
-    }
-  ],
   "files": [
     "dist",
     "README.md"
   ],
   "types": "dist",
+  "main": "./dist/mithril-hooks.umd",
+  "module": "./dist/mithril-hooks.module.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./dist/mithril-hooks.cjs",
+      "import": "./dist/mithril-hooks.module.js",
+      "default": "./dist/mithril-hooks.umd.js"
+    }
+  },
+  "scripts": {
+    "deps": "../../node_modules/npm-check-updates/build/src/bin/cli.js -u",
+    "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
+    "build:vite": "vite build",
+    "build:types": "../../node_modules/typescript/bin/tsc --p tsconfig.gen.json"
+  },
   "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
   "homepage": "https://github.com/ArthurClemens/mithril-hooks",
   "license": "MIT",
   "dependencies": {
-    "flatted": "^3.1.1"
+    "flatted": "^3.2.7"
   },
   "peerDependencies": {
     "mithril": "^2.0.4"
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.10.2",
-    "@types/mithril": "2.0.7",
-    "size-limit": "^4.10.2"
+    "@types/mithril": "^2.0.12"
   }
 }

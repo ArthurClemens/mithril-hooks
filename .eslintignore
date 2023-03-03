@@ -1,4 +1,4 @@
 node_modules
 dist
-react-app-env.d.ts
-screenshots
+vite.config.ts
+cypress.config.js

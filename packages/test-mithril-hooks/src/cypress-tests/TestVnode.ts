@@ -6,7 +6,7 @@ type TAttrs = {
   vnode?: m.Vnode;
 };
 const Vnode = ({ title, vnode }: TAttrs) =>
-  m('[data-test-id=Vnode]', [m('h2', title), vnode.children]);
+  m('[data-test-id=Vnode]', [m('h2', title), vnode?.children]);
 
 const HookedVnode = withHooks(Vnode);
 

@@ -12,7 +12,7 @@ type TState = {
 };
 
 type TAction = {
-  type: string;
+  type: 'increment' | 'decrement';
 };
 
 const counterReducer = (state: TState, action: TAction) => {
@@ -46,10 +46,10 @@ const CounterFn = (attrs: TCounterAttrs) => {
   const remove = () => {
     const removeOnTransitionEnd = () => {
       removeCounter(id);
-      dom.current.removeEventListener('transitionend', removeOnTransitionEnd);
+      dom.current?.removeEventListener('transitionend', removeOnTransitionEnd);
     };
-    dom.current.addEventListener('transitionend', removeOnTransitionEnd);
-    dom.current.classList.remove('active');
+    dom.current?.addEventListener('transitionend', removeOnTransitionEnd);
+    dom.current?.classList.remove('active');
   };
 
   useEffect(
