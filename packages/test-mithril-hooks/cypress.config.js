@@ -1,9 +1,9 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
+  video: false,
+  screenshotOnRunFailure: false,
   e2e: {
-    video: false,
-    screenshots: false,
     baseUrl: 'http://localhost:3000/#!',
     specPattern: './cypress/e2e/*.spec.js',
     defaultCommandTimeout: 10000,
