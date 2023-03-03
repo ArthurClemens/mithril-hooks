@@ -1,6 +1,6 @@
 {
   "name": "test-mithril-hooks",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "private": true,
   "scripts": {
     "deps": "npm-check-updates -u",
@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "mithril": "2.2.2",
-    "mithril-hooks": "^0.7.1"
+    "mithril-hooks": "0.7.2"
   },
   "devDependencies": {
     "@types/mithril": "2.0.12",
