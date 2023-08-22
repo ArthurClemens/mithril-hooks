@@ -18,7 +18,7 @@
     "mithril-hooks": "0.7.2"
   },
   "devDependencies": {
-    "@types/mithril": "2.0.12",
+    "@types/mithril": "2.0.14",
     "start-server-and-test": "^2.0.0"
   }
 }
