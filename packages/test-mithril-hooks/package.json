@@ -14,7 +14,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "mithril": "2.2.2",
+    "mithril": "2.2.5",
     "mithril-hooks": "0.7.2"
   },
   "devDependencies": {
